@@ -111,11 +111,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: clamp(12px, 2vw, 40px);
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 100;
-            border-radius: 5px; 
+            border-radius: 5px;
+            cursor: move;
         }
 
         .points-red {
@@ -370,7 +371,7 @@
         const darkModeSelect = document.getElementById('dark-mode');
         const innovationSupportCheckbox = document.getElementById('innovation-support');
         const smeCheckbox = document.getElementById('sme');
-        const floatingPointsElement = document.getElementById('floating-points');
+        // const floatingPointsElement = document.getElementById('floating-points');
 
         form.addEventListener('change', calculatePoints);
         darkModeSelect.addEventListener('change', toggleDarkMode);
@@ -463,6 +464,54 @@
                 floatingPointsElement.classList.add('points-green');
             }
         }
+
+
+        // JavaScript code to make the floating point draggable
+        const floatingPointsElement = document.getElementById('floating-points');
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        floatingPointsElement.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+        document.addEventListener('mouseleave', dragEnd);
+
+        function dragStart(e) {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+
+            if (e.target === floatingPointsElement) {
+                isDragging = true;
+            }
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, floatingPointsElement);
+            }
+        }
+
+        function dragEnd(e) {
+            isDragging = false;
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+        }
+
+
     </script>
 </body>
 </html>
