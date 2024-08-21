@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japan Permanent Residency Point Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            margin-bottom: 20px;
+        }
+
+        section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Japan Permanent Residency Point Calculator</h1>
+        <p>This calculator is designed for highly-skilled foreign professionals seeking permanent residency in Japan. Please note that there are alternative paths to obtain permanent residency that do not require points.</p>
+        
+        <form id="calculator-form">
+            <section>
+                <h2>Age</h2>
+                <div>
+                    <input type="radio" id="age-below-30" name="age" value="15">
+                    <label for="age-below-30">Below 30</label>
+                </div>
+                <div>
+                    <input type="radio" id="age-30-34" name="age" value="10">
+                    <label for="age-30-34">30-34</label>
+                </div>
+                <div>
+                    <input type="radio" id="age-35-39" name="age" value="5">
+                    <label for="age-35-39">35-39</label>
+                </div>
+                <div>
+                    <input type="radio" id="age-40-plus" name="age" value="0">
+                    <label for="age-40-plus">40 or above</label>
+                </div>
+            </section>
+
+            <section>
+                <h2>Education</h2>
+                <div>
+                    <input type="radio" id="phd" name="academic" value="30">
+                    <label for="phd">PhD (excluding professional degrees)</label>
+                </div>
+                <div>
+                    <input type="radio" id="professional-degree" name="academic" value="25">
+                    <label for="professional-degree">Professional degree (e.g., MBA, MOT) in business</label>
+                </div>
+                <div>
+                    <input type="radio" id="masters-degree" name="academic" value="20">
+                    <label for="masters-degree">Master's or professional degree (Senmon Gakko)</label>
+                </div>
+                <div>
+                    <input type="radio" id="bachelors-degree" name="academic" value="10">
+                    <label for="bachelors-degree">Bachelor's degree or equivalent</label>
+                </div>
+                <div>
+                    <input type="radio" id="high-school-or-lower" name="academic" value="0">
+                    <label for="high-school-or-lower">High school diploma or lower</label>
+                </div>
+            </section>
+
+            <section>
+                <h2>Bonus Academic Qualifications</h2>
+                <div>
+                    <input type="checkbox" id="graduated-japan-university" name="additional-academic" value="10">
+                    <label for="graduated-japan-university">Graduated from a Japanese university</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="highly-regarded-university" name="additional-academic" value="10">
+                    <label for="highly-regarded-university">Graduated from a university highly regarded by the Japanese government</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="multiple-advanced-degrees" name="additional-academic" value="5">
+                    <label for="multiple-advanced-degrees">Holds two or more doctoral, master's, or professional degrees in different fields</label>
+                </div>
+            </section>
+
+            <section>
+                <h2>Professional Experience</h2>
+                <div>
+                    <input type="radio" id="experience-over-10" name="experience" value="20">
+                    <label for="experience-over-10">More than 10 years</label>
+                </div>
+                <div>
+                    <input type="radio" id="experience-7-to-10" name="experience" value="15">
+                    <label for="experience-7-to-10">7 to 10 years</label>
+                </div>
+                <div>
+                    <input type="radio" id="experience-5-to-7" name="experience" value="10">
+                    <label for="experience-5-to-7">5 to 7 years</label>
+                </div>
+                <div>
+                    <input type="radio" id="experience-3-to-5" name="experience" value="5">
+                    <label for="experience-3-to-5">3 to 5 years</label>
+                </div>
+                <div>
+                    <input type="radio" id="experience-less-3" name="experience" value="0">
+                    <label for="experience-less-3">Less than 3 years or no experience</label>
+                </div>
+            </section>
+
+            <section>
+                <h2>Organizational Bonuses</h2>
+                <div>
+                    <input type="checkbox" id="employed-by-sme" name="additional-organization" value="0">
+                    <label for="employed-by-sme">Employed by a Small or Medium-sized Enterprise (SME)</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="org-financial-support" name="additional-organization" value="10">
+                    <label for="org-financial-support">Organization receives financial support for innovation (additional 10 points for SMEs)</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="sme-research-ratio" name="additional-organization" value="5">
+                    <label for="sme-research-ratio">SME with research expenses ratio exceeding 3%</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="cutting-edge-business" name="additional-organization" value="10">
+                    <label for="cutting-edge-business">Engaged in cutting-edge business recognized by the Minister of Justice</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="foreign-qualification" name="additional-organization" value="5">
+                    <label for="foreign-qualification">Holds a foreign qualification related to the job (e.g., Attorney, AICPA, Fashion Awards)</label>
+                </div>
+            </section>
+
+            <section>
+                <h2>Yearly Compensation (with bonuses)</h2>
+                <div>
+                    <input type="radio" id="salary-over-10m" name="salary" value="40">
+                    <label for="salary-over-10m">¥10 million or higher</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-9m-to-10m" name="salary" value="35">
+                    <label for="salary-9m-to-10m">¥9 million to ¥10 million</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-8m-to-9m" name="salary" value="30">
+                    <label for="salary-8m-to-9m">¥8 million to ¥9 million</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-7m-to-8m" name="salary" value="25">
+                    <label for="salary-7m-to-8m">¥7 million to ¥8 million</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-6m-to-7m" name="salary" value="20">
+                    <label for="salary-6m-to-7m">¥6 million to ¥7 million</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-5m-to-6m" name="salary" value="15">
+                    <label for="salary-5m-to-6m">¥5 million to ¥6 million</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-4m-to-5m" name="salary" value="10">
+                    <label for="salary-4m-to-5m">¥4 million to ¥5 million</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-3m-to-4m" name="salary" value="0">
+                    <label for="salary-3m-to-4m">¥3 million to ¥4 million</label>
+                </div>
+            </section>
+
+            <section>
+                <h2>Japanese Language Ability</h2>
+                <div>
+                    <input type="radio" id="jlpt-n1-or-equivalent" name="japanese-proficiency" value="15">
+                    <label for="jlpt-n1-or-equivalent">Passed JLPT N1 or equivalent (e.g., 480+ points on BJT), or graduated from a foreign university with a Japanese language major</label>
+                </div>
+                <div>
+                    <input type="radio" id="jlpt-n2-or-equivalent" name="japanese-proficiency" value="10">
+                    <label for="jlpt-n2-or-equivalent">Passed JLPT N2 or equivalent (e.g., 400+ points on BJT), not applicable if graduated from a Japanese university</label>
+                </div>
+                <div>
+                    <input type="radio" id="no-japanese-proficiency" name="japanese-proficiency" value="0">
+                    <label for="no-japanese-proficiency">No Japanese language proficiency</label>
+                </div>
+            </section>
+
+            <section>
+                <h2>Research Accomplishments</h2>
+                <div>
+                    <input type="checkbox" id="patent-inventor" name="research-achievements" value="15">
+                    <label for="patent-inventor">Holds at least one patent as an inventor</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="foreign-research-funding" name="research-achievements" value="15">
+                    <label for="foreign-research-funding">Received research funding from foreign governments on at least three occasions</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="academic-papers" name="research-achievements" value="15">
+                    <label for="academic-papers">Listed as the primary author on three or more academic papers in recognized databases</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="research-achievements-other" name="research-achievements" value="15">
+                    <label for="research-achievements-other">Other research achievements approved by the Minister of Justice</label>
+                </div>
+            </section>
+
+            <section>
+                <h2>Japanese Licenses and Certifications</h2>
+                <div>
+                    <input type="radio" id="no-licenses" name="qualifications" value="0">
+                    <label for="no-licenses">No Japanese licenses or certifications</label>
+                </div>
+                <div>
+                    <input type="radio" id="one-license" name="qualifications" value="5">
+                    <label for="one-license">Holds at least one Japanese license or certification</label>
+                </div>
+                <div>
+                    <input type="radio" id="multiple-licenses" name="qualifications" value="10">
+                    <label for="multiple-licenses">Holds multiple Japanese licenses or certifications</label>
+                </div>
+            </section>
+
+            <button type="button" id="calculate-btn">Calculate Points</button>
+        </form>
+
+        <section id="result">
+            <h2>Total Points: <span id="total-points">0</span></h2>
+            <ul>
+                <li>70 points or higher: Eligible for permanent residency within 3 years</li>
+                <li>80 points or higher: Eligible for permanent residency in 1 year</li>
+                <li>Alternative paths to permanent residency exist, such as completing a 10-year residency</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>For official information and university lists, please visit the <a href="https://www.moj.go.jp/isa/publications/materials/newimmiact_3_evaluate_index.html" target="_blank">Ministry of Justice website</a>.</p>
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('calculator-form');
+        const totalPointsElement = document.getElementById('total-points');
+
+        form.addEventListener('change', calculatePoints);
+
+        function calculatePoints() {
+            const age = parseInt(form.elements['age'].value) || 0;
+            const academic = parseInt(form.elements['academic'].value) || 0;
+            const additionalAcademic = Array.from(form.elements['additional-academic']).reduce((sum, checkbox) => sum + (checkbox.checked ? parseInt(checkbox.value) : 0), 0);
+            const experience = parseInt(form.elements['experience'].value) || 0;
+            const additionalOrganization = Array.from(form.elements['additional-organization']).reduce((sum, checkbox) => sum + (checkbox.checked ? parseInt(checkbox.value) : 0), 0);
+            const salary = parseInt(form.elements['salary'].value) || 0;
+            const japaneseProficiency = parseInt(form.elements['japanese-proficiency'].value) || 0;
+            const researchAchievements = Array.from(form.elements['research-achievements']).reduce((sum, checkbox) => sum + (checkbox.checked ? parseInt(checkbox.value) : 0), 0);
+            const qualifications = parseInt(form.elements['qualifications'].value) || 0;
+
+            const totalPoints = age + academic + additionalAcademic + experience + additionalOrganization + salary + japaneseProficiency + researchAchievements + qualifications;
+
+            totalPointsElement.textContent = totalPoints;
+        }
+    </script>
+</body>
+</html>
