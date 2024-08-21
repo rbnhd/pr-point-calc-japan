@@ -227,6 +227,60 @@
             </section>
 
             <section>
+                <h2 class="section-title">Research Achievements 🔬</h2>
+                <div>
+                    <input type="checkbox" id="patents" name="research-achievements" value="15">
+                    <label for="patents" class="checkbox-label">Hold at least one patent as an inventor</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="research-funding" name="research-achievements" value="15">
+                    <label for="research-funding" class="checkbox-label">Conducted research that was funded by grants or competitive grants from foreign governments on at least three occasions</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="research-papers" name="research-achievements" value="15">
+                    <label for="research-papers" class="checkbox-label">Have been listed as the responsible author on three or more academic articles published in journals listed in the Academic Paper Database</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="research-other" name="research-achievements" value="15">
+                    <label for="research-other" class="checkbox-label">Other research achievements that have been approved by the Minister of Justice</label>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Japanese Language Proficiency 🗾</h2>
+                <div>
+                    <input type="radio" id="jlpt-n1" name="japanese-proficiency" value="15">
+                    <label for="jlpt-n1" class="checkbox-label">Passed N1 of the Japanese-Language Proficiency Test or equivalent (e.g., 480+ points on the BJT), or graduated from a foreign university with a major in the Japanese language</label>
+                </div>
+                <div>
+                    <input type="radio" id="jlpt-n2" name="japanese-proficiency" value="10">
+                    <label for="jlpt-n2" class="checkbox-label">Passed N2 of the Japanese-Language Proficiency Test or equivalent (e.g., 400+ points on the BJT), but not applicable if the applicant graduated from a Japanese university</label>
+                </div>
+                <div>
+                    <input type="radio" id="jlpt-none" name="japanese-proficiency" value="0">
+                    <label for="jlpt-none" class="checkbox-label">None</label>
+                </div>
+            </section>
+
+
+
+            <section>
+                <h2 class="section-title">Japanese National Qualifications 📜</h2>
+                <div>
+                    <input type="radio" id="qualifications-none" name="qualifications" value="0">
+                    <label for="qualifications-none" class="checkbox-label">None</label>
+                </div>
+                <div>
+                    <input type="radio" id="qualifications-one" name="qualifications" value="5">
+                    <label for="qualifications-one" class="checkbox-label">Yes, I have at least one license</label>
+                </div>
+                <div>
+                    <input type="radio" id="qualifications-multiple" name="qualifications" value="10">
+                    <label for="qualifications-multiple" class="checkbox-label">Yes, I have more than one license</label>
+                </div>
+            </section>
+
+            <section>
                 <h2 class="section-title">Work Experience 💼</h2>
                 <div>
                     <input type="radio" id="experience-10-plus" name="experience" value="20">
@@ -310,57 +364,7 @@
                 </div>
             </section>
 
-            <section>
-                <h2 class="section-title">Japanese Language Proficiency 🗾</h2>
-                <div>
-                    <input type="radio" id="jlpt-n1" name="japanese-proficiency" value="15">
-                    <label for="jlpt-n1" class="checkbox-label">Passed N1 of the Japanese-Language Proficiency Test or equivalent (e.g., 480+ points on the BJT), or graduated from a foreign university with a major in the Japanese language</label>
-                </div>
-                <div>
-                    <input type="radio" id="jlpt-n2" name="japanese-proficiency" value="10">
-                    <label for="jlpt-n2" class="checkbox-label">Passed N2 of the Japanese-Language Proficiency Test or equivalent (e.g., 400+ points on the BJT), but not applicable if the applicant graduated from a Japanese university</label>
-                </div>
-                <div>
-                    <input type="radio" id="jlpt-none" name="japanese-proficiency" value="0">
-                    <label for="jlpt-none" class="checkbox-label">None</label>
-                </div>
-            </section>
 
-            <section>
-                <h2 class="section-title">Research Achievements 🔬</h2>
-                <div>
-                    <input type="checkbox" id="patents" name="research-achievements" value="15">
-                    <label for="patents" class="checkbox-label">Hold at least one patent as an inventor</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="research-funding" name="research-achievements" value="15">
-                    <label for="research-funding" class="checkbox-label">Conducted research that was funded by grants or competitive grants from foreign governments on at least three occasions</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="research-papers" name="research-achievements" value="15">
-                    <label for="research-papers" class="checkbox-label">Have been listed as the responsible author on three or more academic articles published in journals listed in the Academic Paper Database</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="research-other" name="research-achievements" value="15">
-                    <label for="research-other" class="checkbox-label">Other research achievements that have been approved by the Minister of Justice</label>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="section-title">Japanese National Qualifications 📜</h2>
-                <div>
-                    <input type="radio" id="qualifications-none" name="qualifications" value="0">
-                    <label for="qualifications-none" class="checkbox-label">None</label>
-                </div>
-                <div>
-                    <input type="radio" id="qualifications-one" name="qualifications" value="5">
-                    <label for="qualifications-one" class="checkbox-label">Yes, I have at least one license</label>
-                </div>
-                <div>
-                    <input type="radio" id="qualifications-multiple" name="qualifications" value="10">
-                    <label for="qualifications-multiple" class="checkbox-label">Yes, I have more than one license</label>
-                </div>
-            </section>
         </form>
 
         <section id="result">
@@ -463,6 +467,22 @@
                 smeCheckbox.checked = false;
             }
         }
+
+        // Toggle JLPT N2 button based on japanese university degree
+        const japaneseUniversityCheckbox = document.getElementById('japanese-university');
+        const jlptN2Radio = document.getElementById('jlpt-n2');
+
+        japaneseUniversityCheckbox.addEventListener('change', toggleJLPTN2Radio);
+
+        function toggleJLPTN2Radio() {
+            if (japaneseUniversityCheckbox.checked) {
+                jlptN2Radio.disabled = true;
+                jlptN2Radio.checked = false;
+            } else {
+                jlptN2Radio.disabled = false;
+            }
+        }
+
 
         function updateFloatingPointsColor(points) {
             if (points < 70) {
