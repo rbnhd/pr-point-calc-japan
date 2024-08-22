@@ -146,10 +146,77 @@
         .dark-mode .points-green {
             background-color: hsl(120, 68%, 12%);
         }
+
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.toggle-slider {
+            background-color: #2196F3;
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-icons {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 5px;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .hosted-by {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
+
+
+
     <div class="container">
         <h1>PR Eligibility Points Calculator, Japan</h1>
         <p>This calculator is designed for highly-skilled foreign professionals seeking permanent residency in Japan.
@@ -160,12 +227,18 @@
         </div>
 
         <div class="dark-mode-toggle">
-            <label for="dark-mode">Theme:</label>
-            <select id="dark-mode">
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-            </select>
+            <label for="dark-mode-switch">Theme:</label>
+            <label class="toggle-switch">
+                <input type="checkbox" id="dark-mode-switch">
+                <span class="toggle-slider">
+                    <div class="toggle-icons">
+                        <span>☀️</span>
+                        <span>🌙</span>
+                    </div>
+                </span>
+            </label>
         </div>
+
 
         <form id="calculator-form">
             <section>
@@ -400,26 +473,37 @@
             </ul>
         </section>
 
+
         <footer>
             <p class="disclaimer">Disclaimer: The host does not take any responsibility for the validity of the points.
                 Please check the latest information on the <a
                     href="https://www.moj.go.jp/isa/applications/resources/newimmiact_3_index.html"
                     target="_blank">Ministry of Justice Japan webpage for highly-skilled human resources point
                     system</a>.</p>
+            <p class="hosted-by">Hosted on GitHub by <a href="https://github.com/rbnhd/pr-point-calc-japan"
+                    target="_blank">Vikram Kushwaha</a></p>
         </footer>
+
     </div>
 
     <script>
         const form = document.getElementById('calculator-form');
         const totalPointsElement = document.getElementById('total-points');
-        const darkModeSelect = document.getElementById('dark-mode');
         const innovationSupportCheckbox = document.getElementById('innovation-support');
         const smeCheckbox = document.getElementById('sme');
-        // const floatingPointsElement = document.getElementById('floating-points');
 
         form.addEventListener('change', calculatePoints);
-        darkModeSelect.addEventListener('change', toggleDarkMode);
         innovationSupportCheckbox.addEventListener('change', toggleSMECheckbox);
+
+        // Dark mode toggle
+        const darkModeSwitch = document.getElementById('dark-mode-switch');
+        darkModeSwitch.addEventListener('change', toggleDarkMode);
+
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+        }
+
 
         function calculatePoints() {
             const age = parseInt(form.elements['age'].value) || 0;
