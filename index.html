@@ -500,14 +500,7 @@
         form.addEventListener('change', calculatePoints);
         innovationSupportCheckbox.addEventListener('change', toggleSMECheckbox);
 
-        // Dark mode toggle
-        const darkModeSwitch = document.getElementById('dark-mode-switch');
-        darkModeSwitch.addEventListener('change', toggleDarkMode);
 
-        function toggleDarkMode() {
-            const body = document.body;
-            body.classList.toggle('dark-mode');
-        }
 
 
         function calculatePoints() {
@@ -660,6 +653,14 @@
             el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
         }
 
+        // Dark mode toggle
+        const darkModeSwitch = document.getElementById('dark-mode-switch');
+        darkModeSwitch.addEventListener('change', toggleDarkMode);
+
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+        }
 
     </script>
 </body>
