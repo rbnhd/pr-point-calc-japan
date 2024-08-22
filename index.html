@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Japan Permanent Residency Point Calculator</title>
+    <title>Japan PR Points Calculator</title>
     <style>
-
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -19,7 +19,8 @@
             padding: 20px;
         }
 
-        h1, h2 {
+        h1,
+        h2 {
             margin-bottom: 20px;
         }
 
@@ -125,12 +126,12 @@
         }
 
         .points-yellow-green {
-            background-color:  hsl(134, 100%, 16%);
+            background-color: hsl(134, 100%, 23%);
             color: white;
         }
 
         .points-green {
-            background-color: hsl(120, 68%, 12%);
+            background-color: hsl(120, 72%, 14%);
             color: white;
         }
 
@@ -139,19 +140,20 @@
         }
 
         .dark-mode .points-yellow-green {
-            background-color:  hsl(134, 100%, 16%);
+            background-color: hsl(134, 100%, 16%);
         }
 
         .dark-mode .points-green {
             background-color: hsl(120, 68%, 12%);
         }
-
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>Japan Permanent Residency Point Calculator</h1>
-        <p>This calculator is designed for highly-skilled foreign professionals seeking permanent residency in Japan. Please note that there are alternative paths to obtain permanent residency that do not require points.</p>
+        <h1>PR Eligibility Points Calculator, Japan</h1>
+        <p>This calculator is designed for highly-skilled foreign professionals seeking permanent residency in Japan.
+            Please note that there are alternative paths to obtain permanent residency that do not require points.</p>
 
         <div class="floating-points" id="floating-points">
             <span>Total Points: <span id="total-points">0</span></span>
@@ -164,7 +166,7 @@
                 <option value="dark">Dark</option>
             </select>
         </div>
-        
+
         <form id="calculator-form">
             <section>
                 <h2 class="section-title">Age 🎂</h2>
@@ -190,11 +192,13 @@
                 <h2 class="section-title">Academic Background 🎓</h2>
                 <div>
                     <input type="radio" id="doctorate" name="academic" value="30">
-                    <label for="doctorate" class="checkbox-label">Doctoral degrees (excluding professional degrees)</label>
+                    <label for="doctorate" class="checkbox-label">Doctoral degrees (excluding professional
+                        degrees)</label>
                 </div>
                 <div>
                     <input type="radio" id="professional" name="academic" value="25">
-                    <label for="professional" class="checkbox-label">Professional degree (MBA, MOT) in business administration</label>
+                    <label for="professional" class="checkbox-label">Professional degree (MBA, MOT) in business
+                        administration</label>
                 </div>
                 <div>
                     <input type="radio" id="masters" name="academic" value="20">
@@ -202,7 +206,8 @@
                 </div>
                 <div>
                     <input type="radio" id="bachelors" name="academic" value="10">
-                    <label for="bachelors" class="checkbox-label">University degree (bachelor's) or equivalent education</label>
+                    <label for="bachelors" class="checkbox-label">University degree (bachelor's) or equivalent
+                        education</label>
                 </div>
                 <div>
                     <input type="radio" id="high-school" name="academic" value="0">
@@ -218,11 +223,13 @@
                 </div>
                 <div>
                     <input type="checkbox" id="highly-reputable" name="additional-academic" value="10">
-                    <label for="highly-reputable" class="checkbox-label">Considered highly reputable by the Japanese government</label>
+                    <label for="highly-reputable" class="checkbox-label">Considered highly reputable by the Japanese
+                        government</label>
                 </div>
                 <div>
                     <input type="checkbox" id="multiple-degrees" name="additional-academic" value="5">
-                    <label for="multiple-degrees" class="checkbox-label">Two or more doctoral or master's degrees or professional degrees in multiple fields</label>
+                    <label for="multiple-degrees" class="checkbox-label">Two or more doctoral or master's degrees or
+                        professional degrees in multiple fields</label>
                 </div>
             </section>
 
@@ -234,15 +241,19 @@
                 </div>
                 <div>
                     <input type="checkbox" id="research-funding" name="research-achievements" value="15">
-                    <label for="research-funding" class="checkbox-label">Conducted research that was funded by grants or competitive grants from foreign governments on at least three occasions</label>
+                    <label for="research-funding" class="checkbox-label">Conducted research that was funded by grants or
+                        competitive grants from foreign governments on at least three occasions</label>
                 </div>
                 <div>
                     <input type="checkbox" id="research-papers" name="research-achievements" value="15">
-                    <label for="research-papers" class="checkbox-label">Have been listed as the responsible author on three or more academic articles published in journals listed in the Academic Paper Database</label>
+                    <label for="research-papers" class="checkbox-label">Have been listed as the responsible author on
+                        three or more academic articles published in journals listed in the Academic Paper
+                        Database</label>
                 </div>
                 <div>
                     <input type="checkbox" id="research-other" name="research-achievements" value="15">
-                    <label for="research-other" class="checkbox-label">Other research achievements that have been approved by the Minister of Justice</label>
+                    <label for="research-other" class="checkbox-label">Other research achievements that have been
+                        approved by the Minister of Justice</label>
                 </div>
             </section>
 
@@ -250,11 +261,15 @@
                 <h2 class="section-title">Japanese Language Proficiency 🗾</h2>
                 <div>
                     <input type="radio" id="jlpt-n1" name="japanese-proficiency" value="15">
-                    <label for="jlpt-n1" class="checkbox-label">Passed N1 of the Japanese-Language Proficiency Test or equivalent (e.g., 480+ points on the BJT), or graduated from a foreign university with a major in the Japanese language</label>
+                    <label for="jlpt-n1" class="checkbox-label">Passed N1 of the Japanese-Language Proficiency Test or
+                        equivalent (e.g., 480+ points on the BJT), or graduated from a foreign university with a major
+                        in the Japanese language</label>
                 </div>
                 <div>
                     <input type="radio" id="jlpt-n2" name="japanese-proficiency" value="10">
-                    <label for="jlpt-n2" class="checkbox-label">Passed N2 of the Japanese-Language Proficiency Test or equivalent (e.g., 400+ points on the BJT), but not applicable if the applicant graduated from a Japanese university</label>
+                    <label for="jlpt-n2" class="checkbox-label">Passed N2 of the Japanese-Language Proficiency Test or
+                        equivalent (e.g., 400+ points on the BJT), but not applicable if the applicant graduated from a
+                        Japanese university</label>
                 </div>
                 <div>
                     <input type="radio" id="jlpt-none" name="japanese-proficiency" value="0">
@@ -268,7 +283,8 @@
                 <h2 class="section-title">Holder of foreign work-related qualification 📜</h2>
                 <div>
                     <input type="radio" id="qualifications-multiple" name="qualifications" value="10">
-                    <label for="qualifications-multiple" class="checkbox-label">Yes, I have more than one license</label>
+                    <label for="qualifications-multiple" class="checkbox-label">Yes, I have more than one
+                        license</label>
                 </div>
                 <div>
                     <input type="radio" id="qualifications-one" name="qualifications" value="5">
@@ -308,23 +324,28 @@
                 <h2 class="section-title">Additional Organization Points 🏢</h2>
                 <div>
                     <input type="checkbox" id="innovation-support" name="additional-organization" value="10">
-                    <label for="innovation-support" class="checkbox-label">Belong to an organization that receives financial support for innovation (extra 10 points for SMEs)</label>
+                    <label for="innovation-support" class="checkbox-label">Belong to an organization that receives
+                        financial support for innovation (extra 10 points for SMEs)</label>
                 </div>
                 <div class="sub-bullet">
                     <input type="checkbox" id="sme" name="additional-organization" value="10">
-                    <label for="sme" class="checkbox-label">Employed by a Small and Medium-sized Enterprise (SME)</label>
+                    <label for="sme" class="checkbox-label">Employed by a Small and Medium-sized Enterprise
+                        (SME)</label>
                 </div>
                 <div>
                     <input type="checkbox" id="rd-ratio" name="additional-organization" value="5">
-                    <label for="rd-ratio" class="checkbox-label">Work in small and medium-sized enterprises with a ratio of testing and research expenses, etc. exceeding 3%</label>
+                    <label for="rd-ratio" class="checkbox-label">Work in small and medium-sized enterprises with a ratio
+                        of testing and research expenses, etc. exceeding 3%</label>
                 </div>
                 <div>
                     <input type="checkbox" id="cutting-edge" name="additional-organization" value="10">
-                    <label for="cutting-edge" class="checkbox-label">Engaged in cutting-edge businesses in growth areas (limited to businesses recognized by the Minister of Justice)</label>
+                    <label for="cutting-edge" class="checkbox-label">Engaged in cutting-edge businesses in growth areas
+                        (limited to businesses recognized by the Minister of Justice)</label>
                 </div>
                 <div>
                     <input type="checkbox" id="foreign-qualification" name="additional-organization" value="5">
-                    <label for="foreign-qualification" class="checkbox-label">Holding a foreign qualification related to the job (e.g., Attorney, AICPA, Fashion Awards, etc.)</label>
+                    <label for="foreign-qualification" class="checkbox-label">Holding a foreign qualification related to
+                        the job (e.g., Attorney, AICPA, Fashion Awards, etc.)</label>
                 </div>
             </section>
 
@@ -373,12 +394,18 @@
                 <li>70 points or more: Permanent residency can be obtained in 3 years or less.</li>
                 <li>80 points or more: Permanent residency can be obtained in just 1 year.</li>
                 <li>Other ways to obtain permanent residency exist, such as completing a 10-year residency.</li>
-                <li>For foreign work-related qualification see: <a href="https://www.moj.go.jp/isa/content/930001661.pdf" target="_blank">List of foreign qualifications, awards, etc. that are eligible</a></li>
+                <li>For foreign work-related qualification see: <a
+                        href="https://www.moj.go.jp/isa/content/930001661.pdf" target="_blank">List of foreign
+                        qualifications, awards, etc. that are eligible</a></li>
             </ul>
         </section>
 
         <footer>
-            <p class="disclaimer">Disclaimer: The host does not take any responsibility for the validity of the points. Please check the latest information on the <a href="https://www.moj.go.jp/isa/applications/resources/newimmiact_3_index.html" target="_blank">Ministry of Justice Japan webpage for highly-skilled human resources point system</a>.</p>
+            <p class="disclaimer">Disclaimer: The host does not take any responsibility for the validity of the points.
+                Please check the latest information on the <a
+                    href="https://www.moj.go.jp/isa/applications/resources/newimmiact_3_index.html"
+                    target="_blank">Ministry of Justice Japan webpage for highly-skilled human resources point
+                    system</a>.</p>
         </footer>
     </div>
 
@@ -547,5 +574,6 @@
 
     </script>
 </body>
+
 </html>
 </antArtifact>
