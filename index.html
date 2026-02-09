@@ -4,28 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Calculate your Japan Permanent Residency (PR) eligibility points under the Highly Skilled Professional visa system. Free online calculator for immigration points.">
-    <meta name="keywords" content="Japan PR, permanent residency, points calculator, highly skilled professional, HSP visa, immigration Japan">
-    <meta property="og:title" content="Japan PR Points Calculator">
-    <meta property="og:description" content="Calculate your eligibility points for Japan Permanent Residency under the Highly Skilled Professional visa system.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://rbnhd.github.io/pr-point-calc-japan/">
-    <meta name="twitter:card" content="summary">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇯🇵</text></svg>">
-    <link rel="canonical" href="https://rbnhd.github.io/pr-point-calc-japan/">
     <title>Japan PR Points Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <main class="container">
+    <div class="container">
         <h1><strong>PR Eligibility Points Calculator, Japan</strong></h1>
         <p><strong>This calculator is designed for highly-skilled foreign professionals seeking permanent residency in
                 Japan.</strong></p>
 
 
-        <div class="floating-points" id="floating-points" role="status" aria-live="polite" aria-atomic="true">
+        <div class="floating-points" id="floating-points">
             <span>Total Points: <span id="total-points">0</span></span>
         </div>
 
@@ -45,268 +36,227 @@
 
         <form id="calculator-form">
             <section>
-                <fieldset>
-                    <legend class="section-title">Age 🎂</legend>
-                    <div>
-                        <input type="radio" id="age-under-30" name="age" value="15">
-                        <label for="age-under-30" class="checkbox-label">Under 30 years old</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="age-30-34" name="age" value="10">
-                        <label for="age-30-34" class="checkbox-label">30-34 years old</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="age-35-39" name="age" value="5">
-                        <label for="age-35-39" class="checkbox-label">35-39 years old</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="age-40-above" name="age" value="0">
-                        <label for="age-40-above" class="checkbox-label">40 years old or above</label>
-                    </div>
-                </fieldset>
+                <h2 class="section-title">Age 🎂</h2>
+                <div>
+                    <input type="radio" id="age-under-30" name="age" value="15">
+                    <label for="age-under-30" class="checkbox-label">Under 30 years old</label>
+                </div>
+                <div>
+                    <input type="radio" id="age-30-34" name="age" value="10">
+                    <label for="age-30-34" class="checkbox-label">30-34 years old</label>
+                </div>
+                <div>
+                    <input type="radio" id="age-35-39" name="age" value="5">
+                    <label for="age-35-39" class="checkbox-label">35-39 years old</label>
+                </div>
+                <div>
+                    <input type="radio" id="age-40-above" name="age" value="0">
+                    <label for="age-40-above" class="checkbox-label">40 years old or above</label>
+                </div>
             </section>
 
             <section>
-                <fieldset>
-                    <legend class="section-title">Academic Background 🎓</legend>
-                    <div>
-                        <input type="radio" id="doctorate" name="academic" value="30">
-                        <label for="doctorate" class="checkbox-label">Doctoral degrees (excluding professional
-                            degrees)</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="professional" name="academic" value="25">
-                        <label for="professional" class="checkbox-label">Professional degree (MBA, MOT) in business
-                            administration</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="masters" name="academic" value="20">
-                        <label for="masters" class="checkbox-label">Master's or professional degree (Senmon Gakko)</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="bachelors" name="academic" value="10">
-                        <label for="bachelors" class="checkbox-label">University degree (bachelor's) or equivalent
-                            education</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="high-school" name="academic" value="0">
-                        <label for="high-school" class="checkbox-label">High school or lower</label>
-                    </div>
-                </fieldset>
+                <h2 class="section-title">Academic Background 🎓</h2>
+                <div>
+                    <input type="radio" id="doctorate" name="academic" value="30">
+                    <label for="doctorate" class="checkbox-label">Doctoral degrees (excluding professional
+                        degrees)</label>
+                </div>
+                <div>
+                    <input type="radio" id="professional" name="academic" value="25">
+                    <label for="professional" class="checkbox-label">Professional degree (MBA, MOT) in business
+                        administration</label>
+                </div>
+                <div>
+                    <input type="radio" id="masters" name="academic" value="20">
+                    <label for="masters" class="checkbox-label">Master's or professional degree (Senmon Gakko)</label>
+                </div>
+                <div>
+                    <input type="radio" id="bachelors" name="academic" value="10">
+                    <label for="bachelors" class="checkbox-label">University degree (bachelor's) or equivalent
+                        education</label>
+                </div>
+                <div>
+                    <input type="radio" id="high-school" name="academic" value="0">
+                    <label for="high-school" class="checkbox-label">High school or lower</label>
+                </div>
             </section>
 
             <section>
-                <fieldset>
-                    <legend class="section-title">Additional Academic Qualifications 🏫</legend>
-                    <div>
-                        <input type="checkbox" id="japanese-university" name="additional-academic" value="10">
-                        <label for="japanese-university" class="checkbox-label">Graduated from a Japanese university</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="highly-reputable" name="additional-academic" value="10">
-                        <label for="highly-reputable" class="checkbox-label">Graduated from a university that is recognized as "excellent" by the Ministry of Justice (<a href="https://kikuchi-immigration-services.com/blog/eligible-universities-for-hsp-highly-skilled-professionals-visa-in-japan/" target="_blank">see list</a>)</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="multiple-degrees" name="additional-academic" value="5">
-                        <label for="multiple-degrees" class="checkbox-label">Two or more doctoral or master's degrees or
-                            professional degrees in multiple fields</label>
-                    </div>
-                </fieldset>
+                <h2 class="section-title">Additional Academic Qualifications 🏫</h2>
+                <div>
+                    <input type="checkbox" id="japanese-university" name="additional-academic" value="10">
+                    <label for="japanese-university" class="checkbox-label">Graduated from a Japanese university</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="highly-reputable" name="additional-academic" value="10">
+                    <label for="highly-reputable" class="checkbox-label">Graduated from a university that is recognized as "excellent" by the Ministry of Justice (<a href="https://kikuchi-immigration-services.com/blog/eligible-universities-for-hsp-highly-skilled-professionals-visa-in-japan/" target="_blank">see list</a>)</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="multiple-degrees" name="additional-academic" value="5">
+                    <label for="multiple-degrees" class="checkbox-label">Two or more doctoral or master's degrees or
+                        professional degrees in multiple fields</label>
+                </div>
             </section>
 
             <section>
-                <fieldset>
-                    <legend class="section-title">Research Achievements 🔬</legend>
-                    <div>
-                        <input type="checkbox" id="patents" name="research-achievements" value="15">
-                        <label for="patents" class="checkbox-label">Hold at least one patent as an inventor</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="research-funding" name="research-achievements" value="15">
-                        <label for="research-funding" class="checkbox-label">Conducted research that was funded by grants or
-                            competitive grants from foreign governments on at least three occasions</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="research-papers" name="research-achievements" value="15">
-                        <label for="research-papers" class="checkbox-label">Have been listed as the responsible author on
-                            three or more academic articles published in journals listed in the Academic Paper
-                            Database</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="research-other" name="research-achievements" value="15">
-                        <label for="research-other" class="checkbox-label">Other research achievements that have been
-                            approved by the Minister of Justice</label>
-                    </div>
-                </fieldset>
+                <h2 class="section-title">Research Achievements 🔬</h2>
+                <div>
+                    <input type="checkbox" id="patents" name="research-achievements" value="15">
+                    <label for="patents" class="checkbox-label">Hold at least one patent as an inventor</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="research-funding" name="research-achievements" value="15">
+                    <label for="research-funding" class="checkbox-label">Conducted research that was funded by grants or
+                        competitive grants from foreign governments on at least three occasions</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="research-papers" name="research-achievements" value="15">
+                    <label for="research-papers" class="checkbox-label">Have been listed as the responsible author on
+                        three or more academic articles published in journals listed in the Academic Paper
+                        Database</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="research-other" name="research-achievements" value="15">
+                    <label for="research-other" class="checkbox-label">Other research achievements that have been
+                        approved by the Minister of Justice</label>
+                </div>
             </section>
 
             <section>
-                <fieldset>
-                    <legend class="section-title">Japanese Language Proficiency 🗾</legend>
-                    <div>
-                        <input type="radio" id="jlpt-n1" name="japanese-proficiency" value="15">
-                        <label for="jlpt-n1" class="checkbox-label">Passed N1 of the Japanese-Language Proficiency Test or
-                            equivalent (e.g., 480+ points on the BJT), or graduated from a foreign university with a major
-                            in the Japanese language</label>
+                <h2 class="section-title">Japanese Language Proficiency 🗾</h2>
+                <div>
+                    <input type="radio" id="jlpt-n1" name="japanese-proficiency" value="15">
+                    <label for="jlpt-n1" class="checkbox-label">Passed N1 of the Japanese-Language Proficiency Test or
+                        equivalent (e.g., 480+ points on the BJT), or graduated from a foreign university with a major
+                        in the Japanese language</label>
+                </div>
+                <div>
+                    <input type="radio" id="jlpt-n2" name="japanese-proficiency" value="10">
+                    <label for="jlpt-n2" class="checkbox-label">Passed N2 of the Japanese-Language Proficiency Test or
+                        equivalent (e.g., 400+ points on the BJT), but not applicable if the applicant graduated from a
+                        Japanese university</label>
+                    <div id="jlpt-n2-help" class="help-text" style="display: none;">
+                        <strong>Note:</strong> This option is not available because you selected "Graduated from a Japanese university" above. According to the regulations, JLPT N2 points cannot be claimed if you graduated from a Japanese university.
                     </div>
-                    <div>
-                        <input type="radio" id="jlpt-n2" name="japanese-proficiency" value="10">
-                        <label for="jlpt-n2" class="checkbox-label">Passed N2 of the Japanese-Language Proficiency Test or
-                            equivalent (e.g., 400+ points on the BJT), but not applicable if the applicant graduated from a
-                            Japanese university</label>
-                        <div id="jlpt-n2-help" class="help-text" style="display: none;">
-                            <strong>Note:</strong> This option is not available because you selected "Graduated from a Japanese university" above. According to the regulations, JLPT N2 points cannot be claimed if you graduated from a Japanese university.
-                        </div>
-                    </div>
-                    <div>
-                        <input type="radio" id="jlpt-none" name="japanese-proficiency" value="0">
-                        <label for="jlpt-none" class="checkbox-label">None</label>
-                    </div>
-                </fieldset>
+                </div>
+                <div>
+                    <input type="radio" id="jlpt-none" name="japanese-proficiency" value="0">
+                    <label for="jlpt-none" class="checkbox-label">None</label>
+                </div>
             </section>
 
 
 
             <section>
-                <fieldset>
-                    <legend class="section-title">Holder of Japanese National Qualifications 「国家資格」 📜 <span style="font-size: 0.8em; font-weight: normal;">(<a href="https://www.moj.go.jp/isa/content/930001661.pdf" target="_blank">see eligible qualifications</a>)</span></legend>
-                    <div>
-                        <input type="radio" id="qualifications-multiple" name="qualifications" value="10">
-                        <label for="qualifications-multiple" class="checkbox-label">Yes, I have more than one
-                            license</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="qualifications-one" name="qualifications" value="5">
-                        <label for="qualifications-one" class="checkbox-label">Yes, I have at least one license</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="qualifications-none" name="qualifications" value="0">
-                        <label for="qualifications-none" class="checkbox-label">None</label>
-                    </div>
-                </fieldset>
+                <h2 class="section-title">Holder of Japanese National Qualifications 「国家資格」 📜 <span style="font-size: 0.8em; font-weight: normal;">(<a href="https://www.moj.go.jp/isa/content/930001661.pdf" target="_blank">see eligible qualifications</a>)</span></h2>
+                <div>
+                    <input type="radio" id="qualifications-multiple" name="qualifications" value="10">
+                    <label for="qualifications-multiple" class="checkbox-label">Yes, I have more than one
+                        license</label>
+                </div>
+                <div>
+                    <input type="radio" id="qualifications-one" name="qualifications" value="5">
+                    <label for="qualifications-one" class="checkbox-label">Yes, I have at least one license</label>
+                </div>
+                <div>
+                    <input type="radio" id="qualifications-none" name="qualifications" value="0">
+                    <label for="qualifications-none" class="checkbox-label">None</label>
+                </div>
             </section>
 
             <section>
-                <fieldset>
-                    <legend class="section-title">Work Experience 💼</legend>
-                    <div>
-                        <input type="radio" id="experience-10-plus" name="experience" value="20">
-                        <label for="experience-10-plus" class="checkbox-label">10 years or more</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="experience-7-10" name="experience" value="15">
-                        <label for="experience-7-10" class="checkbox-label">7 years or more, but less than 10 years</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="experience-5-7" name="experience" value="10">
-                        <label for="experience-5-7" class="checkbox-label">5 years or more, but less than 7 years</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="experience-3-5" name="experience" value="5">
-                        <label for="experience-3-5" class="checkbox-label">3 years or more, but less than 5 years</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="experience-less-3" name="experience" value="0">
-                        <label for="experience-less-3" class="checkbox-label">Less than 3 years or no experience</label>
-                    </div>
-                </fieldset>
+                <h2 class="section-title">Work Experience 💼</h2>
+                <div>
+                    <input type="radio" id="experience-10-plus" name="experience" value="20">
+                    <label for="experience-10-plus" class="checkbox-label">10 years or more</label>
+                </div>
+                <div>
+                    <input type="radio" id="experience-7-10" name="experience" value="15">
+                    <label for="experience-7-10" class="checkbox-label">7 years or more, but less than 10 years</label>
+                </div>
+                <div>
+                    <input type="radio" id="experience-5-7" name="experience" value="10">
+                    <label for="experience-5-7" class="checkbox-label">5 years or more, but less than 7 years</label>
+                </div>
+                <div>
+                    <input type="radio" id="experience-3-5" name="experience" value="5">
+                    <label for="experience-3-5" class="checkbox-label">3 years or more, but less than 5 years</label>
+                </div>
+                <div>
+                    <input type="radio" id="experience-less-3" name="experience" value="0">
+                    <label for="experience-less-3" class="checkbox-label">Less than 3 years or no experience</label>
+                </div>
             </section>
 
             <section>
-                <fieldset>
-                    <legend class="section-title">Additional Organization Points 🏢</legend>
-                    <div>
-                        <input type="checkbox" id="innovation-support" name="additional-organization" value="10">
-                        <label for="innovation-support" class="checkbox-label">Belong to an organization that receives
-                            financial support for innovation</label>
-                    </div>
-                    <div class="sub-bullet">
-                        <input type="checkbox" id="sme" name="additional-organization" value="10">
-                        <label for="sme" class="checkbox-label">The above organization is recognized as a Small and
-                            Medium-sized Enterprise
-                            (SME)</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="rd-ratio" name="additional-organization" value="5">
-                        <label for="rd-ratio" class="checkbox-label">Work in small and medium-sized enterprises with a ratio
-                            of testing and research expenses, etc. exceeding 3%</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="cutting-edge" name="additional-organization" value="10">
-                        <label for="cutting-edge" class="checkbox-label">Engaged in cutting-edge businesses in growth areas
-                            (limited to businesses recognized by the Minister of Justice)</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="foreign-qualification" name="additional-organization" value="5">
-                        <label for="foreign-qualification" class="checkbox-label">Holding a foreign qualification related to
-                            the job (e.g., Attorney, AICPA, Fashion Awards, etc.)</label>
-                    </div>
-                </fieldset>
+                <h2 class="section-title">Additional Organization Points 🏢</h2>
+                <div>
+                    <input type="checkbox" id="innovation-support" name="additional-organization" value="10">
+                    <label for="innovation-support" class="checkbox-label">Belong to an organization that receives
+                        financial support for innovation</label>
+                </div>
+                <div class="sub-bullet">
+                    <input type="checkbox" id="sme" name="additional-organization" value="10">
+                    <label for="sme" class="checkbox-label">The above organization is recognized as a Small and
+                        Medium-sized Enterprise
+                        (SME)</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="rd-ratio" name="additional-organization" value="5">
+                    <label for="rd-ratio" class="checkbox-label">Work in small and medium-sized enterprises with a ratio
+                        of testing and research expenses, etc. exceeding 3%</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="cutting-edge" name="additional-organization" value="10">
+                    <label for="cutting-edge" class="checkbox-label">Engaged in cutting-edge businesses in growth areas
+                        (limited to businesses recognized by the Minister of Justice)</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="foreign-qualification" name="additional-organization" value="5">
+                    <label for="foreign-qualification" class="checkbox-label">Holding a foreign qualification related to
+                        the job (e.g., Attorney, AICPA, Fashion Awards, etc.)</label>
+                </div>
             </section>
 
             <section>
-                <fieldset>
-                    <legend class="section-title">Annual Salary (including bonus) 💰</legend>
-                    <div>
-                        <input type="radio" id="salary-10m-plus" name="salary" value="40">
-                        <label for="salary-10m-plus" class="checkbox-label">¥10M or more</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="salary-9-10m" name="salary" value="35">
-                        <label for="salary-9-10m" class="checkbox-label">¥9M to ¥10M</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="salary-8-9m" name="salary" value="30">
-                        <label for="salary-8-9m" class="checkbox-label">¥8M to ¥9M</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="salary-7-8m" name="salary" value="25">
-                        <label for="salary-7-8m" class="checkbox-label">¥7M to ¥8M</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="salary-6-7m" name="salary" value="20">
-                        <label for="salary-6-7m" class="checkbox-label">¥6M to ¥7M</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="salary-5-6m" name="salary" value="15">
-                        <label for="salary-5-6m" class="checkbox-label">¥5M to ¥6M</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="salary-4-5m" name="salary" value="10">
-                        <label for="salary-4-5m" class="checkbox-label">¥4M to ¥5M</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="salary-3-4m" name="salary" value="0">
-                        <label for="salary-3-4m" class="checkbox-label">¥3M to ¥4M</label>
-                    </div>
-                </fieldset>
+                <h2 class="section-title">Annual Salary (including bonus) 💰</h2>
+                <div>
+                    <input type="radio" id="salary-10m-plus" name="salary" value="40">
+                    <label for="salary-10m-plus" class="checkbox-label">¥10M or more</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-9-10m" name="salary" value="35">
+                    <label for="salary-9-10m" class="checkbox-label">¥9M to ¥10M</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-8-9m" name="salary" value="30">
+                    <label for="salary-8-9m" class="checkbox-label">¥8M to ¥9M</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-7-8m" name="salary" value="25">
+                    <label for="salary-7-8m" class="checkbox-label">¥7M to ¥8M</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-6-7m" name="salary" value="20">
+                    <label for="salary-6-7m" class="checkbox-label">¥6M to ¥7M</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-5-6m" name="salary" value="15">
+                    <label for="salary-5-6m" class="checkbox-label">¥5M to ¥6M</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-4-5m" name="salary" value="10">
+                    <label for="salary-4-5m" class="checkbox-label">¥4M to ¥5M</label>
+                </div>
+                <div>
+                    <input type="radio" id="salary-3-4m" name="salary" value="0">
+                    <label for="salary-3-4m" class="checkbox-label">¥3M to ¥4M</label>
+                </div>
             </section>
 
 
         </form>
-
-        <section id="result-section">
-            <fieldset>
-                <legend class="section-title">Your Result 📊</legend>
-                <div class="progress-container">
-                    <div class="progress-bar-track">
-                        <div class="progress-bar-fill" id="progress-bar-fill"></div>
-                        <div class="progress-marker" style="left: 70%;" title="70 points — 3-year path">
-                            <span class="marker-label">70</span>
-                        </div>
-                        <div class="progress-marker" style="left: 80%;" title="80 points — 1-year path">
-                            <span class="marker-label">80</span>
-                        </div>
-                    </div>
-                    <div class="progress-labels">
-                        <span>0</span>
-                        <span>100</span>
-                    </div>
-                </div>
-                <p id="result-message" class="result-message">Select your criteria above to calculate points.</p>
-                <button type="button" id="reset-button">Reset Calculator</button>
-            </fieldset>
-        </section>
 
         <section id="explanation">
             <h2>Explanation of Total Points</h2>
@@ -351,7 +301,7 @@
             </section>
         </footer>
 
-    </main>
+    </div>
 
     <script src="calc.js"></script>
 
