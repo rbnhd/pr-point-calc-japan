@@ -285,3 +285,23 @@ input:checked+.toggle-slider:before {
 .dark-mode .hosted-by {
     color: #8b949e;
 }
+
+/* ===== FIELDSET RESET ===== */
+
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+legend {
+    padding: 0;
+    width: 100%;
+}
+
+legend.section-title {
+    display: block;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
