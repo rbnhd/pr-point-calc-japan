@@ -13,6 +13,9 @@ var darkModeSwitch = document.getElementById('dark-mode-switch');
 var japaneseUniversityCheckbox = document.getElementById('japanese-university');
 var jlptN2Radio = document.getElementById('jlpt-n2');
 var jlptN2Help = document.getElementById('jlpt-n2-help');
+var progressMarker70 = document.getElementById('progress-marker-70');
+var progressMarker80 = document.getElementById('progress-marker-80');
+var progressMaxLabel = document.getElementById('progress-max-label');
 
 // ===== Drag State =====
 var isDragging = false;
@@ -148,8 +151,12 @@ function toggleJLPTN2Radio() {
  * @param {number} points - Current total points
  */
 function updateProgressBar(points) {
-    var percentage = Math.min((points / 100) * 100, 100);
+    var scaleMax = getProgressScaleMax(points);
+    var percentage = Math.min((points / scaleMax) * 100, 100);
+
     progressBarFill.style.width = percentage + '%';
+    progressMaxLabel.textContent = scaleMax;
+    positionProgressMarkers(scaleMax);
 
     if (points < 70) {
         progressBarFill.style.backgroundColor = '#cf222e';
@@ -158,6 +165,22 @@ function updateProgressBar(points) {
     } else {
         progressBarFill.style.backgroundColor = '#1a7f37';
     }
+}
+
+function getProgressScaleMax(points) {
+    if (points <= 100) {
+        return 100;
+    }
+
+    return Math.min(Math.ceil(points / 50) * 50, 250);
+}
+
+function positionProgressMarkers(scaleMax) {
+    var marker70Position = Math.min((70 / scaleMax) * 100, 100);
+    var marker80Position = Math.min((80 / scaleMax) * 100, 100);
+
+    progressMarker70.style.left = marker70Position + '%';
+    progressMarker80.style.left = marker80Position + '%';
 }
 
 /**
@@ -170,13 +193,13 @@ function updateResultMessage(points) {
     if (points === 0) {
         resultMessage.textContent = 'Select your criteria above to calculate points.';
     } else if (points < 70) {
-        resultMessage.textContent = 'You have ' + points + ' points. You need ' + (70 - points) + ' more points to qualify for the 3-year PR path.';
+        resultMessage.textContent = 'You have ' + points + ' points. You need ' + (70 - points) + ' more points to reach the 3-year threshold. For PR eligibility, we must maintain 70+ points continuously for 3 years before the application date.';
         resultMessage.classList.add('result-under-70');
     } else if (points < 80) {
-        resultMessage.textContent = 'You have ' + points + ' points! You qualify for PR via the 3-year path. ' + (80 - points) + ' more points needed for the 1-year path.';
+        resultMessage.textContent = 'You have ' + points + ' points. This meets the 3-year route threshold if we maintain 70+ continuously for 3 years before applying. You need ' + (80 - points) + ' more points to target the 1-year route.';
         resultMessage.classList.add('result-70-to-79');
     } else {
-        resultMessage.textContent = 'You have ' + points + ' points! You qualify for PR via the fast-track 1-year path!';
+        resultMessage.textContent = 'You have ' + points + ' points. This meets the 1-year route threshold if we maintain 80+ continuously for 1 year immediately before applying.';
         resultMessage.classList.add('result-80-plus');
     }
 }
@@ -189,10 +212,8 @@ function updateResultMessage(points) {
 function resetCalculator() {
     form.reset();
     totalPointsElement.textContent = '0';
-    progressBarFill.style.width = '0%';
-    progressBarFill.style.backgroundColor = '#cf222e';
-    resultMessage.textContent = 'Select your criteria above to calculate points.';
-    resultMessage.className = 'result-message';
+    updateProgressBar(0);
+    updateResultMessage(0);
     floatingPointsElement.classList.remove('points-red', 'points-yellow-green', 'points-green');
     smeCheckbox.disabled = true;
     smeCheckbox.checked = false;
