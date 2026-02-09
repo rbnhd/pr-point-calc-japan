@@ -119,12 +119,21 @@ floatingPointsElement.addEventListener('mousedown', dragStart);
 document.addEventListener('mousemove', drag);
 document.addEventListener('mouseup', dragEnd);
 document.addEventListener('mouseleave', dragEnd);
+// Touch support for mobile (only on screens > 768px where widget is draggable)
+floatingPointsElement.addEventListener('touchstart', dragStart, { passive: false });
+document.addEventListener('touchmove', drag, { passive: false });
+document.addEventListener('touchend', dragEnd);
 
 function dragStart(e) {
-    initialX = e.clientX - xOffset;
-    initialY = e.clientY - yOffset;
+    // Disable drag on mobile where floating widget is a fixed bottom bar
+    if (window.innerWidth <= 768) return;
 
-    if (e.target === floatingPointsElement) {
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    initialX = clientX - xOffset;
+    initialY = clientY - yOffset;
+
+    if (e.target === floatingPointsElement || floatingPointsElement.contains(e.target)) {
         isDragging = true;
     }
 }
@@ -132,8 +141,10 @@ function dragStart(e) {
 function drag(e) {
     if (isDragging) {
         e.preventDefault();
-        currentX = e.clientX - initialX;
-        currentY = e.clientY - initialY;
+        var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        currentX = clientX - initialX;
+        currentY = clientY - initialY;
 
         xOffset = currentX;
         yOffset = currentY;

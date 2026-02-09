@@ -305,3 +305,78 @@ legend.section-title {
     font-weight: bold;
     margin-bottom: 20px;
 }
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+    .floating-points,
+    .dark-mode-toggle,
+    #reset-button,
+    .progress-container {
+        display: none !important;
+    }
+
+    body {
+        background-image: none !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    section {
+        break-inside: avoid;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+    }
+}
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .floating-points {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 50px;
+        border-radius: 0;
+        font-size: 18px;
+        touch-action: none;
+        pointer-events: auto;
+    }
+
+    body {
+        padding-bottom: 60px;
+    }
+
+    section {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.4em;
+    }
+
+    .section-title {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 8px;
+    }
+
+    .checkbox-label {
+        font-size: 14px;
+    }
+
+    .sub-bullet {
+        margin-left: 15px;
+    }
+}
