@@ -285,6 +285,29 @@
 
         </form>
 
+        <section id="result-section">
+            <fieldset>
+                <legend class="section-title">Your Result 📊</legend>
+                <div class="progress-container">
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                        <div class="progress-marker" style="left: 70%;" title="70 points — 3-year path">
+                            <span class="marker-label">70</span>
+                        </div>
+                        <div class="progress-marker" style="left: 80%;" title="80 points — 1-year path">
+                            <span class="marker-label">80</span>
+                        </div>
+                    </div>
+                    <div class="progress-labels">
+                        <span>0</span>
+                        <span>100</span>
+                    </div>
+                </div>
+                <p id="result-message" class="result-message">Select your criteria above to calculate points.</p>
+                <button type="button" id="reset-button">Reset Calculator</button>
+            </fieldset>
+        </section>
+
         <section id="explanation">
             <h2>Explanation of Total Points</h2>
             <ul>

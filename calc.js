@@ -3,9 +3,13 @@ const form = document.getElementById('calculator-form');
 const totalPointsElement = document.getElementById('total-points');
 const innovationSupportCheckbox = document.getElementById('innovation-support');
 const smeCheckbox = document.getElementById('sme');
+const progressBarFill = document.getElementById('progress-bar-fill');
+const resultMessage = document.getElementById('result-message');
+const resetButton = document.getElementById('reset-button');
 
 form.addEventListener('change', calculatePoints);
 innovationSupportCheckbox.addEventListener('change', toggleSMECheckbox);
+resetButton.addEventListener('click', resetCalculator);
 
 
 function calculatePoints() {
@@ -24,6 +28,8 @@ function calculatePoints() {
     totalPointsElement.textContent = totalPoints;
 
     updateFloatingPointsColor(totalPoints);
+    updateProgressBar(totalPoints);
+    updateResultMessage(totalPoints);
 }
 
 function calculateSalaryPoints(age) {
@@ -102,6 +108,56 @@ function updateFloatingPointsColor(points) {
         floatingPointsElement.classList.remove('points-red', 'points-yellow-green');
         floatingPointsElement.classList.add('points-green');
     }
+}
+
+function updateProgressBar(points) {
+    var percentage = Math.min((points / 100) * 100, 100);
+    progressBarFill.style.width = percentage + '%';
+
+    if (points < 70) {
+        progressBarFill.style.backgroundColor = '#cf222e';
+    } else if (points < 80) {
+        progressBarFill.style.backgroundColor = '#2da44e';
+    } else {
+        progressBarFill.style.backgroundColor = '#1a7f37';
+    }
+}
+
+function updateResultMessage(points) {
+    resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
+
+    if (points === 0) {
+        resultMessage.textContent = 'Select your criteria above to calculate points.';
+    } else if (points < 70) {
+        resultMessage.textContent = 'You have ' + points + ' points. You need ' + (70 - points) + ' more points to qualify for the 3-year PR path.';
+        resultMessage.classList.add('result-under-70');
+    } else if (points < 80) {
+        resultMessage.textContent = 'You have ' + points + ' points! You qualify for PR via the 3-year path. ' + (80 - points) + ' more points needed for the 1-year path.';
+        resultMessage.classList.add('result-70-to-79');
+    } else {
+        resultMessage.textContent = 'You have ' + points + ' points! You qualify for PR via the fast-track 1-year path!';
+        resultMessage.classList.add('result-80-plus');
+    }
+}
+
+function resetCalculator() {
+    form.reset();
+    totalPointsElement.textContent = '0';
+    progressBarFill.style.width = '0%';
+    progressBarFill.style.backgroundColor = '#cf222e';
+    resultMessage.textContent = 'Select your criteria above to calculate points.';
+    resultMessage.className = 'result-message';
+    floatingPointsElement.classList.remove('points-red', 'points-yellow-green', 'points-green');
+    // Re-disable SME checkbox
+    smeCheckbox.disabled = true;
+    smeCheckbox.checked = false;
+    // Re-enable JLPT N2
+    document.getElementById('jlpt-n2').disabled = false;
+    document.getElementById('jlpt-n2-help').style.display = 'none';
+    // Reset drag position
+    xOffset = 0;
+    yOffset = 0;
+    floatingPointsElement.style.transform = '';
 }
 
 
