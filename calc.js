@@ -1,40 +1,93 @@
+'use strict';
 
-const form = document.getElementById('calculator-form');
-const totalPointsElement = document.getElementById('total-points');
-const innovationSupportCheckbox = document.getElementById('innovation-support');
-const smeCheckbox = document.getElementById('sme');
-const progressBarFill = document.getElementById('progress-bar-fill');
-const resultMessage = document.getElementById('result-message');
-const resetButton = document.getElementById('reset-button');
+// ===== DOM Element References =====
+var form = document.getElementById('calculator-form');
+var totalPointsElement = document.getElementById('total-points');
+var innovationSupportCheckbox = document.getElementById('innovation-support');
+var smeCheckbox = document.getElementById('sme');
+var progressBarFill = document.getElementById('progress-bar-fill');
+var resultMessage = document.getElementById('result-message');
+var resetButton = document.getElementById('reset-button');
+var floatingPointsElement = document.getElementById('floating-points');
+var darkModeSwitch = document.getElementById('dark-mode-switch');
+var japaneseUniversityCheckbox = document.getElementById('japanese-university');
+var jlptN2Radio = document.getElementById('jlpt-n2');
+var jlptN2Help = document.getElementById('jlpt-n2-help');
 
+// ===== Drag State =====
+var isDragging = false;
+var currentX;
+var currentY;
+var initialX;
+var initialY;
+var xOffset = 0;
+var yOffset = 0;
+
+// ===== Event Listeners =====
 form.addEventListener('change', calculatePoints);
 innovationSupportCheckbox.addEventListener('change', toggleSMECheckbox);
 resetButton.addEventListener('click', resetCalculator);
+japaneseUniversityCheckbox.addEventListener('change', toggleJLPTN2Radio);
+floatingPointsElement.addEventListener('mousedown', dragStart);
+document.addEventListener('mousemove', drag);
+document.addEventListener('mouseup', dragEnd);
+document.addEventListener('mouseleave', dragEnd);
+floatingPointsElement.addEventListener('touchstart', dragStart, { passive: false });
+document.addEventListener('touchmove', drag, { passive: false });
+document.addEventListener('touchend', dragEnd);
+darkModeSwitch.addEventListener('change', toggleDarkMode);
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches);
+    }
+});
 
-
+// ===== Point Calculation =====
+/**
+ * Calculates total PR points by summing values from all form sections.
+ * Called on every form change event.
+ */
 function calculatePoints() {
-    const age = parseInt(form.elements['age'].value) || 0;
-    const academic = parseInt(form.elements['academic'].value) || 0;
-    const additionalAcademic = Array.from(form.elements['additional-academic']).reduce((sum, checkbox) => sum + (checkbox.checked ? parseInt(checkbox.value) : 0), 0);
-    const experience = parseInt(form.elements['experience'].value) || 0;
-    const additionalOrganization = Array.from(form.elements['additional-organization']).reduce((sum, checkbox) => sum + (checkbox.checked ? parseInt(checkbox.value) : 0), 0);
-    const salary = calculateSalaryPoints(age);
-    const japaneseProficiency = parseInt(form.elements['japanese-proficiency'].value) || 0;
-    const researchAchievements = Array.from(form.elements['research-achievements']).reduce((sum, checkbox) => sum + (checkbox.checked ? parseInt(checkbox.value) : 0), 0);
-    const qualifications = parseInt(form.elements['qualifications'].value) || 0;
+    var age = parseInt(form.elements.age.value, 10) || 0;
+    var academic = parseInt(form.elements.academic.value, 10) || 0;
+    var additionalAcademic = Array.from(form.elements['additional-academic']).reduce(function(sum, checkbox) {
+        return sum + (checkbox.checked ? parseInt(checkbox.value, 10) : 0);
+    }, 0);
+    var experience = parseInt(form.elements.experience.value, 10) || 0;
+    var additionalOrganization = Array.from(form.elements['additional-organization']).reduce(function(sum, checkbox) {
+        return sum + (checkbox.checked ? parseInt(checkbox.value, 10) : 0);
+    }, 0);
+    var salary = calculateSalaryPoints(age);
+    var japaneseProficiency = parseInt(form.elements['japanese-proficiency'].value, 10) || 0;
+    var researchAchievements = Array.from(form.elements['research-achievements']).reduce(function(sum, checkbox) {
+        return sum + (checkbox.checked ? parseInt(checkbox.value, 10) : 0);
+    }, 0);
+    var qualifications = parseInt(form.elements.qualifications.value, 10) || 0;
 
-    const totalPoints = age + academic + additionalAcademic + experience + additionalOrganization + salary + japaneseProficiency + researchAchievements + qualifications;
+    var totalPoints = age + academic + additionalAcademic + experience + additionalOrganization + salary + japaneseProficiency + researchAchievements + qualifications;
 
     totalPointsElement.textContent = totalPoints;
-
     updateFloatingPointsColor(totalPoints);
     updateProgressBar(totalPoints);
     updateResultMessage(totalPoints);
 }
 
+// ===== Salary-Age Matrix =====
+/**
+ * Returns salary points adjusted for age bracket.
+ * Japan's HSP system reduces salary points for older applicants at lower salary bands.
+ *
+ * Matrix rows = salary brackets (JPY 10M+ down to JPY 3-4M).
+ * Matrix cols = age brackets (under 30, 30-34, 35-39, 40+).
+ * Higher salary bands award full points regardless of age.
+ * Lower salary bands award 0 points for older age brackets.
+ *
+ * @param {number} age - The age point value from the form (15, 10, 5, or 0)
+ * @returns {number} The adjusted salary points
+ */
 function calculateSalaryPoints(age) {
-    const salary = parseInt(form.elements['salary'].value) || 0;
-    const salaryPoints = [
+    var salary = parseInt(form.elements.salary.value, 10) || 0;
+    var salaryPoints = [
         [40, 40, 40, 40],
         [35, 35, 35, 35],
         [30, 30, 30, 30],
@@ -44,9 +97,8 @@ function calculateSalaryPoints(age) {
         [10, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-
-    const ageIndex = getAgeIndex(age);
-    const salaryIndex = getSalaryIndex(salary);
+    var ageIndex = getAgeIndex(age);
+    var salaryIndex = getSalaryIndex(salary);
 
     return salaryPoints[salaryIndex][ageIndex];
 }
@@ -69,6 +121,7 @@ function getSalaryIndex(salary) {
     return 7;
 }
 
+// ===== Form Interaction Logic =====
 function toggleSMECheckbox() {
     if (innovationSupportCheckbox.checked) {
         smeCheckbox.disabled = false;
@@ -77,13 +130,6 @@ function toggleSMECheckbox() {
         smeCheckbox.checked = false;
     }
 }
-
-// Toggle JLPT N2 button based on japanese university degree
-const japaneseUniversityCheckbox = document.getElementById('japanese-university');
-const jlptN2Radio = document.getElementById('jlpt-n2');
-const jlptN2Help = document.getElementById('jlpt-n2-help');
-
-japaneseUniversityCheckbox.addEventListener('change', toggleJLPTN2Radio);
 
 function toggleJLPTN2Radio() {
     if (japaneseUniversityCheckbox.checked) {
@@ -96,20 +142,11 @@ function toggleJLPTN2Radio() {
     }
 }
 
-// Update Total points color based on result
-function updateFloatingPointsColor(points) {
-    if (points < 70) {
-        floatingPointsElement.classList.remove('points-yellow-green', 'points-green');
-        floatingPointsElement.classList.add('points-red');
-    } else if (points >= 70 && points < 80) {
-        floatingPointsElement.classList.remove('points-red', 'points-green');
-        floatingPointsElement.classList.add('points-yellow-green');
-    } else {
-        floatingPointsElement.classList.remove('points-red', 'points-yellow-green');
-        floatingPointsElement.classList.add('points-green');
-    }
-}
-
+// ===== Progress Bar & Results =====
+/**
+ * Updates the progress bar width and color based on current points.
+ * @param {number} points - Current total points
+ */
 function updateProgressBar(points) {
     var percentage = Math.min((points / 100) * 100, 100);
     progressBarFill.style.width = percentage + '%';
@@ -123,6 +160,10 @@ function updateProgressBar(points) {
     }
 }
 
+/**
+ * Updates the result message text and styling based on point thresholds.
+ * @param {number} points - Current total points
+ */
 function updateResultMessage(points) {
     resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
 
@@ -140,6 +181,11 @@ function updateResultMessage(points) {
     }
 }
 
+// ===== Reset =====
+/**
+ * Resets the calculator form, points display, progress bar, and all
+ * conditional UI states (SME checkbox, JLPT N2 radio, drag position).
+ */
 function resetCalculator() {
     form.reset();
     totalPointsElement.textContent = '0';
@@ -148,40 +194,30 @@ function resetCalculator() {
     resultMessage.textContent = 'Select your criteria above to calculate points.';
     resultMessage.className = 'result-message';
     floatingPointsElement.classList.remove('points-red', 'points-yellow-green', 'points-green');
-    // Re-disable SME checkbox
     smeCheckbox.disabled = true;
     smeCheckbox.checked = false;
-    // Re-enable JLPT N2
-    document.getElementById('jlpt-n2').disabled = false;
-    document.getElementById('jlpt-n2-help').style.display = 'none';
-    // Reset drag position
+    jlptN2Radio.disabled = false;
+    jlptN2Help.style.display = 'none';
     xOffset = 0;
     yOffset = 0;
     floatingPointsElement.style.transform = '';
 }
 
-
-// JavaScript code to make the floating point draggable
-const floatingPointsElement = document.getElementById('floating-points');
-let isDragging = false;
-let currentX;
-let currentY;
-let initialX;
-let initialY;
-let xOffset = 0;
-let yOffset = 0;
-
-floatingPointsElement.addEventListener('mousedown', dragStart);
-document.addEventListener('mousemove', drag);
-document.addEventListener('mouseup', dragEnd);
-document.addEventListener('mouseleave', dragEnd);
-// Touch support for mobile (only on screens > 768px where widget is draggable)
-floatingPointsElement.addEventListener('touchstart', dragStart, { passive: false });
-document.addEventListener('touchmove', drag, { passive: false });
-document.addEventListener('touchend', dragEnd);
+// ===== Floating Points Color & Dragging =====
+function updateFloatingPointsColor(points) {
+    if (points < 70) {
+        floatingPointsElement.classList.remove('points-yellow-green', 'points-green');
+        floatingPointsElement.classList.add('points-red');
+    } else if (points < 80) {
+        floatingPointsElement.classList.remove('points-red', 'points-green');
+        floatingPointsElement.classList.add('points-yellow-green');
+    } else {
+        floatingPointsElement.classList.remove('points-red', 'points-yellow-green');
+        floatingPointsElement.classList.add('points-green');
+    }
+}
 
 function dragStart(e) {
-    // Disable drag on mobile where floating widget is a fixed bottom bar
     if (window.innerWidth <= 768) return;
 
     var clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -209,35 +245,32 @@ function drag(e) {
     }
 }
 
-function dragEnd(e) {
+function dragEnd() {
     isDragging = false;
 }
 
 function setTranslate(xPos, yPos, el) {
-    el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+    el.style.transform = 'translate3d(' + xPos + 'px, ' + yPos + 'px, 0)';
 }
 
-// Dark mode toggle with automatic detection and manual override
-const darkModeSwitch = document.getElementById('dark-mode-switch');
-
-// Initialize theme on page load
+// ===== Dark Mode =====
+/**
+ * Initializes the theme based on saved localStorage preference
+ * or browser's prefers-color-scheme setting.
+ */
 function initializeTheme() {
-    // Check if user has a saved preference
-    const savedTheme = localStorage.getItem('theme');
+    var savedTheme = localStorage.getItem('theme');
 
     if (savedTheme) {
-        // Use saved preference
         applyTheme(savedTheme === 'dark');
     } else {
-        // Use browser's preferred color scheme
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         applyTheme(prefersDark);
     }
 }
 
-// Apply theme based on isDark boolean
 function applyTheme(isDark) {
-    const body = document.body;
+    var body = document.body;
     if (isDark) {
         body.classList.add('dark-mode');
         darkModeSwitch.checked = true;
@@ -247,25 +280,11 @@ function applyTheme(isDark) {
     }
 }
 
-// Handle manual toggle
 function toggleDarkMode() {
-    const body = document.body;
-    const isDark = body.classList.toggle('dark-mode');
-
-    // Save user's preference
+    var body = document.body;
+    var isDark = body.classList.toggle('dark-mode');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
 }
 
-// Listen for changes in browser's color scheme preference
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    // Only apply if user hasn't set a manual preference
-    if (!localStorage.getItem('theme')) {
-        applyTheme(e.matches);
-    }
-});
-
-// Initialize theme when page loads
+// ===== Initialization =====
 initializeTheme();
-
-// Add event listener for manual toggle
-darkModeSwitch.addEventListener('change', toggleDarkMode);
