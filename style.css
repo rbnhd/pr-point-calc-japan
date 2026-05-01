@@ -121,13 +121,15 @@ footer {
     color: #57606a;
 }
 
-section > div {
+section > div,
+fieldset > div {
     display: flex;
     align-items: flex-start;
     margin-bottom: 10px;
 }
 
-input[type="checkbox"] {
+input[type="checkbox"],
+input[type="radio"] {
     margin-top: 3px;
     flex-shrink: 0;
 }
