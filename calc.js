@@ -13,6 +13,7 @@ var darkModeSwitch = document.getElementById('dark-mode-switch');
 var japaneseUniversityCheckbox = document.getElementById('japanese-university');
 var jlptN2Radio = document.getElementById('jlpt-n2');
 var jlptN2Help = document.getElementById('jlpt-n2-help');
+var designatedTrainingHelp = document.getElementById('designated-training-help');
 var progressMarker70 = document.getElementById('progress-marker-70');
 var progressMarker80 = document.getElementById('progress-marker-80');
 var progressMaxLabel = document.getElementById('progress-max-label');
@@ -31,6 +32,7 @@ form.addEventListener('change', calculatePoints);
 innovationSupportCheckbox.addEventListener('change', toggleSMECheckbox);
 resetButton.addEventListener('click', resetCalculator);
 japaneseUniversityCheckbox.addEventListener('change', toggleJLPTN2Radio);
+japaneseUniversityCheckbox.addEventListener('change', toggleDesignatedTrainingHelp);
 floatingPointsElement.addEventListener('mousedown', dragStart);
 document.addEventListener('mousemove', drag);
 document.addEventListener('mouseup', dragEnd);
@@ -145,6 +147,10 @@ function toggleJLPTN2Radio() {
     }
 }
 
+function toggleDesignatedTrainingHelp() {
+    designatedTrainingHelp.style.display = japaneseUniversityCheckbox.checked ? 'block' : 'none';
+}
+
 // ===== Progress Bar & Results =====
 /**
  * Updates the progress bar width and color based on current points.
@@ -219,6 +225,7 @@ function resetCalculator() {
     smeCheckbox.checked = false;
     jlptN2Radio.disabled = false;
     jlptN2Help.style.display = 'none';
+    designatedTrainingHelp.style.display = 'none';
     xOffset = 0;
     yOffset = 0;
     floatingPointsElement.style.transform = '';

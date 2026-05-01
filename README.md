@@ -7,6 +7,7 @@
 ### Resources used:
 - [Points-Based-Immigration-Treatment, Govt of Japan](https://www.lb.emb-japan.go.jp/Points-Based-Immigration-Treatment.PDF)
 - [Ministry of Japan website](https://www.moj.go.jp/)
+- This calculator covers the bonus-point items applicable to the advanced specialized/technical activities (i)(b) track, excluding management-only items such as director-position and large-investment bonuses.
 
 Disclaimer: The host does not take any responsibility for the validity of the points. Please check the latest information on the [Ministry of Justice Japan webpage for highly-skilled human resources point system](https://www.moj.go.jp/isa/applications/resources/newimmiact_3_index.html)
 
@@ -19,5 +20,6 @@ Disclaimer: The host does not take any responsibility for the validity of the po
 ### 使用リソース：
 - [ポイント制外国人材処遇制度、日本政府](https://www.lb.emb-japan.go.jp/Points-Based-Immigration-Treatment.PDF)
 - [法務省ウェブサイト](https://www.moj.go.jp/)
+- この計算ツールは、高度専門・技術活動（i）（b）に適用されるボーナスポイント項目を対象としています。ただし、役員ポジションや大規模投資など経営・管理活動向けの項目は除きます。
 
 免責事項：ホストはポイントの有効性について一切責任を負いません。最新情報は[法務省高度人材ポイント制度ウェブサイト](https://www.moj.go.jp/isa/applications/resources/newimmiact_3_index.html)でご確認ください。
