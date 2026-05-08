@@ -150,6 +150,7 @@ input[type="radio"] {
     width: 20%;
     height: 10%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: clamp(12px, 2vw, 40px);
@@ -159,6 +160,31 @@ input[type="radio"] {
     z-index: 100;
     border-radius: 6px;
     cursor: move;
+}
+
+.drag-handle {
+    display: grid;
+    grid-template-columns: repeat(3, 6px);
+    grid-template-rows: repeat(2, 6px);
+    gap: 3px;
+    padding: 4px 0 2px;
+    opacity: 0.4;
+    transition: opacity 0.2s ease;
+}
+
+.floating-points:hover .drag-handle {
+    opacity: 0.8;
+}
+
+.grip-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #57606a;
+}
+
+.dark-mode .grip-dot {
+    background-color: #8b949e;
 }
 
 .points-red {
@@ -480,6 +506,11 @@ legend.section-title {
         font-size: 18px;
         touch-action: none;
         pointer-events: auto;
+        flex-direction: row;
+    }
+
+    .drag-handle {
+        display: none;
     }
 
     body {
