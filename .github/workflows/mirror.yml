@@ -11,6 +11,13 @@ concurrency:
 
 jobs:
   mirror:
+    # Only run on the source repo — not on the mirror that inherits this file.
+    # When the mirror receives a force-push it will also trigger this workflow,
+    # but the if-check below causes it to skip immediately (green, no noise).
+    # This also lets us keep Actions enabled on the mirror so that GitHub's
+    # own "pages build and deployment" system workflow can rebuild Pages on
+    # every sync.
+    if: github.repository == 'rbnhd/pr-point-calc-japan'
     runs-on: ubuntu-latest
     permissions:
       contents: read
