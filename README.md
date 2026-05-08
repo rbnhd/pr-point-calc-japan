@@ -2,6 +2,10 @@
 
 # Japan Permanent Residency Point Calculator
 
+**Live site:** https://rbnhd.github.io/pr-point-calc-japan/ (canonical) · https://rbnhd.github.io/japan-hsp-pr-points-calculator/ (mirror)
+
+> This repo is auto-mirrored to https://github.com/rbnhd/japan-hsp-pr-points-calculator for HSP-keyword discoverability on GitHub. Both Pages URLs serve the same calculator; the first is the canonical SEO target. Edit only this repo — the mirror is overwritten on every push to `main`.
+
 ### This calculator is designed for highly-skilled foreign professionals seeking permanent residency in Japan. Please note that there are alternative paths to obtain permanent residency that do not require points.
 
 ### Resources used:

@@ -1,0 +1,29 @@
+name: Mirror to japan-hsp-pr-points-calculator
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: mirror
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout source with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push main to mirror
+        run: |
+          git push --force \
+            "https://x-access-token:${MIRROR_TOKEN}@github.com/rbnhd/japan-hsp-pr-points-calculator.git" \
+            main:main
+        env:
+          MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
