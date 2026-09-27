@@ -62,6 +62,8 @@ function calculatePoints() {
         return;
     }
 
+    // An empty age group must not fall through to the 40+ salary column (age value 0).
+    var ageSelected = form.elements.age.value !== '';
     var age = parseInt(form.elements.age.value, 10) || 0;
     var academic = parseInt(form.elements.academic.value, 10) || 0;
     var additionalAcademic = Array.from(form.elements['additional-academic']).reduce(function(sum, checkbox) {
@@ -73,7 +75,8 @@ function calculatePoints() {
         var counts = checkbox.checked && (checkbox !== smeCheckbox || innovationSupportCheckbox.checked);
         return sum + (counts ? parseInt(checkbox.value, 10) : 0);
     }, 0);
-    var salary = calculateSalaryPoints(age);
+    var salary = calculateSalaryPoints(ageSelected ? age : null);
+    var salaryAwaitingAge = !ageSelected && isAgeDependent(getSalaryRow());
     var japaneseProficiency = parseInt(form.elements['japanese-proficiency'].value, 10) || 0;
     // Flat 15 on the technical track; the 25-point "two or more items" rule applies only to academic research.
     var researchAchievements = Array.from(form.elements['research-achievements']).some(function(checkbox) {
@@ -86,7 +89,7 @@ function calculatePoints() {
     totalPointsElement.textContent = totalPoints;
     updateFloatingPointsColor(totalPoints);
     updateProgressBar(totalPoints);
-    updateResultMessage(totalPoints);
+    updateResultMessage(totalPoints, salaryAwaitingAge);
 }
 
 /**
@@ -112,10 +115,22 @@ function showIneligibleResult() {
  * Higher salary bands award full points regardless of age.
  * Lower salary bands award 0 points for older age brackets.
  *
- * @param {number} age - The age point value from the form (15, 10, 5, or 0)
+ * With no age selected, only bands that score the same for every age count.
+ *
+ * @param {?number} age - The age point value from the form (15, 10, 5, or 0), or null if unselected
  * @returns {number} The adjusted salary points
  */
 function calculateSalaryPoints(age) {
+    var row = getSalaryRow();
+
+    if (age === null) {
+        return isAgeDependent(row) ? 0 : row[0];
+    }
+
+    return row[getAgeIndex(age)];
+}
+
+function getSalaryRow() {
     var salary = parseInt(form.elements.salary.value, 10) || 0;
     var salaryPoints = [
         [40, 40, 40, 40],
@@ -127,10 +142,14 @@ function calculateSalaryPoints(age) {
         [10, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    var ageIndex = getAgeIndex(age);
-    var salaryIndex = getSalaryIndex(salary);
 
-    return salaryPoints[salaryIndex][ageIndex];
+    return salaryPoints[getSalaryIndex(salary)];
+}
+
+function isAgeDependent(row) {
+    return row.some(function(points) {
+        return points !== row[0];
+    });
 }
 
 function getAgeIndex(age) {
@@ -217,13 +236,19 @@ function positionProgressMarkers(scaleMax) {
 /**
  * Updates the result message text and styling based on point thresholds.
  * @param {number} points - Current total points
+ * @param {boolean} [salaryAwaitingAge] - True when a salary band needs an age to be scored
  */
-function updateResultMessage(points) {
+function updateResultMessage(points, salaryAwaitingAge) {
+    var ageHint = 'Select your age to include salary points.';
+
     resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
 
     if (points === 0) {
-        resultMessage.textContent = 'Select your criteria above to calculate points.';
-    } else if (points < 70) {
+        resultMessage.textContent = salaryAwaitingAge ? ageHint : 'Select your criteria above to calculate points.';
+        return;
+    }
+
+    if (points < 70) {
         resultMessage.textContent = 'You have ' + points + ' points. You need ' + (70 - points) + ' more points to reach the 3-year threshold. For PR eligibility, we must maintain 70+ points continuously for 3 years before the application date.';
         resultMessage.classList.add('result-under-70');
     } else if (points < 80) {
@@ -232,6 +257,10 @@ function updateResultMessage(points) {
     } else {
         resultMessage.textContent = 'You have ' + points + ' points. This meets the 1-year route threshold if we maintain 80+ continuously for 1 year immediately before applying.';
         resultMessage.classList.add('result-80-plus');
+    }
+
+    if (salaryAwaitingAge) {
+        resultMessage.textContent += ' ' + ageHint;
     }
 }
 
