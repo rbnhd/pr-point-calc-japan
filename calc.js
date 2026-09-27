@@ -17,6 +17,7 @@ var designatedTrainingHelp = document.getElementById('designated-training-help')
 var progressMarker70 = document.getElementById('progress-marker-70');
 var progressMarker80 = document.getElementById('progress-marker-80');
 var progressMaxLabel = document.getElementById('progress-max-label');
+var salaryUnder3MRadio = document.getElementById('salary-under-3m');
 
 // ===== Scoring Constants =====
 var RESEARCH_ACHIEVEMENT_POINTS = 15;
@@ -56,6 +57,11 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
  * Called on every form change event.
  */
 function calculatePoints() {
+    if (salaryUnder3MRadio.checked) {
+        showIneligibleResult();
+        return;
+    }
+
     var age = parseInt(form.elements.age.value, 10) || 0;
     var academic = parseInt(form.elements.academic.value, 10) || 0;
     var additionalAcademic = Array.from(form.elements['additional-academic']).reduce(function(sum, checkbox) {
@@ -81,6 +87,19 @@ function calculatePoints() {
     updateFloatingPointsColor(totalPoints);
     updateProgressBar(totalPoints);
     updateResultMessage(totalPoints);
+}
+
+/**
+ * Replaces the score with an ineligibility notice. The technical track requires an
+ * annual salary of at least JPY 3M, so no point total qualifies below it.
+ */
+function showIneligibleResult() {
+    totalPointsElement.textContent = 'Not eligible';
+    updateFloatingPointsColor(0);
+    updateProgressBar(0);
+    resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
+    resultMessage.textContent = 'Not eligible: the advanced specialized / technical track requires an annual salary of at least ¥3M. Points cannot be counted below this minimum.';
+    resultMessage.classList.add('result-under-70');
 }
 
 // ===== Salary-Age Matrix =====
