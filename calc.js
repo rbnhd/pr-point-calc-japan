@@ -122,7 +122,7 @@ function showEmptyResult() {
  * annual salary of at least JPY 3M, so no point total qualifies below it.
  */
 function showIneligibleResult() {
-    totalPointsElement.textContent = 'Not eligible';
+    totalPointsElement.textContent = 'N/A';
     updateFloatingPointsColor(0);
     updateProgressBar(0);
     resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
