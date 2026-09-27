@@ -234,6 +234,15 @@ function toggleDesignatedTrainingHelp() {
 }
 
 /**
+ * True when the page was opened by a normal navigation, so the browser has no
+ * history form state to restore.
+ */
+function isFreshNavigation() {
+    var entries = window.performance && performance.getEntriesByType ? performance.getEntriesByType('navigation') : [];
+    return entries.length > 0 && entries[0].type === 'navigate';
+}
+
+/**
  * Re-applies all conditional UI state and recalculates from the current form values.
  * Browsers restore form state on reload and back/forward navigation without firing
  * change events, so this runs on every pageshow (including first load) and after reset.
@@ -409,5 +418,9 @@ function toggleDarkMode() {
 
 // ===== Initialization =====
 initializeTheme();
-// No syncFormState() here: Chromium restores history form state after this script runs
-// and skips disabled controls, so gating waits for pageshow, which also fires on first load.
+// On back/forward (and reload), Chromium restores form state after this script runs and
+// skips disabled controls, so gating waits for pageshow, which also fires on first load.
+// A fresh navigation has nothing to restore, so gate at once rather than after slow assets.
+if (isFreshNavigation()) {
+    syncFormState();
+}

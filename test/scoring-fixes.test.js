@@ -134,6 +134,20 @@ test('BUG-8: restored gated inputs survive when their prerequisite is restored t
     assert.equal(calc.total(), 10 + 20 + 5 + 10 + 10 + 10 + 25 + 15);
 });
 
+// A fresh navigation has no history state to restore, so gating must not wait for
+// pageshow (which a slow background image can delay by seconds).
+test('BUG-8: a fresh navigation gates SME and multiple degrees before pageshow', function() {
+    var calc = loadCalculator(null, { navigationType: 'navigate', beforePageshow: true });
+    assert.equal(calc.el('sme').disabled, true);
+    assert.equal(calc.el('multiple-degrees').disabled, true);
+});
+
+test('BUG-8: back/forward navigation leaves gated inputs restorable until pageshow', function() {
+    var calc = loadCalculator(null, { navigationType: 'back_forward', beforePageshow: true });
+    assert.equal(calc.el('sme').disabled, false);
+    assert.equal(calc.el('multiple-degrees').disabled, false);
+});
+
 test('BUG-8: a back/forward cache restore re-syncs the page', function() {
     var calc = loadCalculator();
     calc.el('age-under-30').checked = true;

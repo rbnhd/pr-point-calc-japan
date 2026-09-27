@@ -13,13 +13,22 @@ var HTML = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
 var SCRIPT = fs.readFileSync(path.join(ROOT, 'calc.js'), 'utf8');
 
 // Mirrors a page load: calc.js runs, then the browser may restore form state from
-// history, then pageshow fires. Chromium restores after load and before pageshow,
-// and skips controls that are disabled at that moment, so restoredIds does too.
-function loadCalculator(restoredIds) {
+// history, then pageshow fires. Chromium restores at readyState "complete", after
+// the script runs and before load/pageshow, and skips controls that are disabled at
+// that moment, so restoredIds does too.
+// options.navigationType: the Navigation Timing type ('navigate', 'reload',
+//   'back_forward'); defaults to 'back_forward' when restoredIds are given.
+// options.beforePageshow: true to stop before pageshow fires.
+function loadCalculator(restoredIds, options) {
+    options = options || {};
+    var navigationType = options.navigationType || (restoredIds ? 'back_forward' : 'navigate');
     var dom = new JSDOM(HTML, { url: 'http://localhost/', runScripts: 'outside-only' });
     var window = dom.window;
     window.matchMedia = function() {
         return { matches: false, addEventListener: function() {}, removeEventListener: function() {} };
+    };
+    window.performance.getEntriesByType = function(type) {
+        return type === 'navigation' ? [{ type: navigationType }] : [];
     };
     window.eval(SCRIPT);
     (restoredIds || []).forEach(function(id) {
@@ -27,7 +36,7 @@ function loadCalculator(restoredIds) {
         if (!input) throw new Error('No element #' + id);
         if (!input.disabled) input.checked = true;
     });
-    window.dispatchEvent(new window.Event('pageshow'));
+    if (!options.beforePageshow) window.dispatchEvent(new window.Event('pageshow'));
 
     var doc = window.document;
 
