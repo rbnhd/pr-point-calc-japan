@@ -17,3 +17,6 @@ archive/
 .gemini/
 .copilot/
 .zed/
+
+# test tooling
+node_modules/
