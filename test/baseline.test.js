@@ -82,8 +82,9 @@ test('JLPT N2 is locked while the Japanese-degree bonus (Bonus 7) is claimed', f
     assert.equal(calc.el('jlpt-n2-help').style.display, 'none');
 });
 
-test('additional academic bonuses score 10 / 10 / 5 / 5', function() {
-    [['japanese-university', 10], ['highly-reputable', 10], ['multiple-degrees', 5],
+// multiple-degrees (+5) is covered with its master's-level gate in audit-fixes.test.js.
+test('additional academic bonuses score 10 / 10 / 5', function() {
+    [['japanese-university', 10], ['highly-reputable', 10],
         ['designated-training', 5]].forEach(function(pair) {
         var calc = loadCalculator();
         calc.check(pair[0]);

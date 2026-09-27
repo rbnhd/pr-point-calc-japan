@@ -18,9 +18,11 @@ var progressMarker70 = document.getElementById('progress-marker-70');
 var progressMarker80 = document.getElementById('progress-marker-80');
 var progressMaxLabel = document.getElementById('progress-max-label');
 var salaryUnder3MRadio = document.getElementById('salary-under-3m');
+var multipleDegreesCheckbox = document.getElementById('multiple-degrees');
 
 // ===== Scoring Constants =====
 var RESEARCH_ACHIEVEMENT_POINTS = 15;
+var MASTERS_LEVEL_POINTS = 20;
 
 // ===== Drag State =====
 var isDragging = false;
@@ -37,6 +39,9 @@ innovationSupportCheckbox.addEventListener('change', toggleSMECheckbox);
 resetButton.addEventListener('click', resetCalculator);
 japaneseUniversityCheckbox.addEventListener('change', toggleJLPTN2Radio);
 japaneseUniversityCheckbox.addEventListener('change', toggleDesignatedTrainingHelp);
+Array.from(form.elements.academic).forEach(function(radio) {
+    radio.addEventListener('change', toggleMultipleDegreesCheckbox);
+});
 floatingPointsElement.addEventListener('mousedown', dragStart);
 document.addEventListener('mousemove', drag);
 document.addEventListener('mouseup', dragEnd);
@@ -44,6 +49,7 @@ document.addEventListener('mouseleave', dragEnd);
 floatingPointsElement.addEventListener('touchstart', dragStart, { passive: false });
 document.addEventListener('touchmove', drag, { passive: false });
 document.addEventListener('touchend', dragEnd);
+document.addEventListener('touchcancel', dragEnd);
 darkModeSwitch.addEventListener('change', toggleDarkMode);
 window.addEventListener('pageshow', syncFormState);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
@@ -73,7 +79,9 @@ function calculatePoints() {
     var age = parseInt(form.elements.age.value, 10) || 0;
     var academic = parseInt(form.elements.academic.value, 10) || 0;
     var additionalAcademic = Array.from(form.elements['additional-academic']).reduce(function(sum, checkbox) {
-        return sum + (checkbox.checked ? parseInt(checkbox.value, 10) : 0);
+        // "Multiple degrees" needs two or more doctoral/master's/professional degrees.
+        var counts = checkbox.checked && (checkbox !== multipleDegreesCheckbox || hasMastersLevelDegree());
+        return sum + (counts ? parseInt(checkbox.value, 10) : 0);
     }, 0);
     var experience = parseInt(form.elements.experience.value, 10) || 0;
     var additionalOrganization = Array.from(form.elements['additional-organization']).reduce(function(sum, checkbox) {
@@ -105,7 +113,8 @@ function showEmptyResult() {
     totalPointsElement.textContent = '0';
     floatingPointsElement.classList.remove('points-red', 'points-yellow-green', 'points-green');
     updateProgressBar(0);
-    updateResultMessage(0);
+    resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
+    resultMessage.textContent = 'Select your criteria above to calculate points.';
 }
 
 /**
@@ -207,6 +216,19 @@ function toggleJLPTN2Radio() {
     }
 }
 
+function hasMastersLevelDegree() {
+    return (parseInt(form.elements.academic.value, 10) || 0) >= MASTERS_LEVEL_POINTS;
+}
+
+function toggleMultipleDegreesCheckbox() {
+    if (hasMastersLevelDegree()) {
+        multipleDegreesCheckbox.disabled = false;
+    } else {
+        multipleDegreesCheckbox.disabled = true;
+        multipleDegreesCheckbox.checked = false;
+    }
+}
+
 function toggleDesignatedTrainingHelp() {
     designatedTrainingHelp.style.display = japaneseUniversityCheckbox.checked ? 'block' : 'none';
 }
@@ -218,6 +240,7 @@ function toggleDesignatedTrainingHelp() {
  */
 function syncFormState() {
     toggleSMECheckbox();
+    toggleMultipleDegreesCheckbox();
     toggleJLPTN2Radio();
     toggleDesignatedTrainingHelp();
     calculatePoints();
@@ -271,11 +294,6 @@ function updateResultMessage(points, salaryAwaitingAge) {
 
     resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
 
-    if (points === 0) {
-        resultMessage.textContent = salaryAwaitingAge ? ageHint : 'Select your criteria above to calculate points.';
-        return;
-    }
-
     if (points < 70) {
         resultMessage.textContent = 'You have ' + points + ' points. You need ' + (70 - points) + ' more points to reach the 3-year threshold. For PR eligibility, we must maintain 70+ points continuously for 3 years before the application date.';
         resultMessage.classList.add('result-under-70');
@@ -321,6 +339,7 @@ function updateFloatingPointsColor(points) {
 
 function dragStart(e) {
     if (window.innerWidth <= 768) return;
+    if (e.type === 'mousedown' && e.button !== 0) return;
 
     var clientX = e.touches ? e.touches[0].clientX : e.clientX;
     var clientY = e.touches ? e.touches[0].clientY : e.clientY;

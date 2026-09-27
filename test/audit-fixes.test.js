@@ -73,7 +73,7 @@ test('F-5: the intro names the advanced specialized / technical track', function
 // F-6: Bonus 7 covers any degree from a Japanese institution of higher education.
 test('F-6: Japanese-degree label covers any Japanese institution of higher education', function() {
     var calc = loadCalculator();
-    var label = calc.doc.querySelector('label[for="japanese-university"]').textContent;
+    var label = calc.doc.querySelector('label[for="japanese-university"]').textContent.replace(/\s+/g, ' ');
     assert.match(label, /institution of higher education/i);
 });
 
