@@ -1,8 +1,9 @@
 'use strict';
 
-// Regression tests for the scoring defects in local/pr-point-calc-bugs.md, as
-// verified against the official MoJ points calculation table
-// (https://www.moj.go.jp/isa/content/001398882.pdf, 930001657.pdf).
+// Regression tests for scoring defects reported in a review of the calculator, as
+// verified against the official MoJ sources: points calculation tables
+// https://www.moj.go.jp/isa/content/001398882.pdf (EN) and 930001657.pdf (JP),
+// and the 評価項目・配点 ordinance 930001658.pdf.
 
 var test = require('node:test');
 var assert = require('node:assert/strict');
@@ -115,18 +116,22 @@ test('BUG-7: SME add-on is disabled on first load and cannot score alone', funct
 // BUG-8: browsers restore form state on reload and back/forward navigation;
 // the page must score and gate that state instead of showing 0.
 test('BUG-8: restored form state is scored and gated on load', function() {
-    var calc = loadCalculator(function(doc) {
-        doc.getElementById('age-under-30').checked = true;
-        doc.getElementById('salary-10m-plus').checked = true;
-        doc.getElementById('japanese-university').checked = true;
-        doc.getElementById('jlpt-n2').checked = true;
-        doc.getElementById('sme').checked = true;
-    });
+    var calc = loadCalculator(['age-under-30', 'salary-10m-plus', 'japanese-university', 'jlpt-n2', 'sme']);
     assert.equal(calc.el('jlpt-n2').disabled, true);
     assert.equal(calc.el('jlpt-n2').checked, false);
     assert.equal(calc.el('sme').checked, false);
     assert.equal(calc.el('designated-training-help').style.display, 'block');
     assert.equal(calc.total(), 65);
+});
+
+// Chromium restores history form state after load, skipping disabled controls, so
+// gated controls must still be enabled then and only be gated on pageshow.
+test('BUG-8: restored gated inputs survive when their prerequisite is restored too', function() {
+    var calc = loadCalculator(['age-30-34', 'masters', 'multiple-degrees', 'innovation-support', 'sme',
+        'japanese-university', 'salary-7-8m', 'patents', 'research-papers']);
+    assert.equal(calc.el('multiple-degrees').checked, true);
+    assert.equal(calc.el('sme').checked, true);
+    assert.equal(calc.total(), 10 + 20 + 5 + 10 + 10 + 10 + 25 + 15);
 });
 
 test('BUG-8: a back/forward cache restore re-syncs the page', function() {

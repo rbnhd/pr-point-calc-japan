@@ -12,16 +12,22 @@ var HTML = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
     .replace(/<script src="calc\.js"><\/script>/, '');
 var SCRIPT = fs.readFileSync(path.join(ROOT, 'calc.js'), 'utf8');
 
-// beforeScript(document) runs before calc.js, e.g. to simulate form state the
-// browser restores on reload or back/forward navigation.
-function loadCalculator(beforeScript) {
+// Mirrors a page load: calc.js runs, then the browser may restore form state from
+// history, then pageshow fires. Chromium restores after load and before pageshow,
+// and skips controls that are disabled at that moment, so restoredIds does too.
+function loadCalculator(restoredIds) {
     var dom = new JSDOM(HTML, { url: 'http://localhost/', runScripts: 'outside-only' });
     var window = dom.window;
     window.matchMedia = function() {
         return { matches: false, addEventListener: function() {}, removeEventListener: function() {} };
     };
-    if (beforeScript) beforeScript(window.document);
     window.eval(SCRIPT);
+    (restoredIds || []).forEach(function(id) {
+        var input = window.document.getElementById(id);
+        if (!input) throw new Error('No element #' + id);
+        if (!input.disabled) input.checked = true;
+    });
+    window.dispatchEvent(new window.Event('pageshow'));
 
     var doc = window.document;
 

@@ -54,10 +54,7 @@ test('F-3: multiple-degrees bonus requires a master\'s-level degree or higher', 
 });
 
 test('F-3: restored multiple-degrees without a postgraduate degree is cleared on load', function() {
-    var calc = loadCalculator(function(doc) {
-        doc.getElementById('bachelors').checked = true;
-        doc.getElementById('multiple-degrees').checked = true;
-    });
+    var calc = loadCalculator(['bachelors', 'multiple-degrees']);
     assert.equal(calc.el('multiple-degrees').checked, false);
     assert.equal(calc.total(), 10);
 });

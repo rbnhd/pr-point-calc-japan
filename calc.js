@@ -236,7 +236,7 @@ function toggleDesignatedTrainingHelp() {
 /**
  * Re-applies all conditional UI state and recalculates from the current form values.
  * Browsers restore form state on reload and back/forward navigation without firing
- * change events, so this runs on load, on every pageshow, and after reset.
+ * change events, so this runs on every pageshow (including first load) and after reset.
  */
 function syncFormState() {
     toggleSMECheckbox();
@@ -409,4 +409,5 @@ function toggleDarkMode() {
 
 // ===== Initialization =====
 initializeTheme();
-syncFormState();
+// No syncFormState() here: Chromium restores history form state after this script runs
+// and skips disabled controls, so gating waits for pageshow, which also fires on first load.
