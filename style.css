@@ -295,6 +295,10 @@ input:checked+.toggle-slider:before {
     color: #4d2d00;
 }
 
+.section-note {
+    margin: 0 0 12px;
+}
+
 .dark-mode .help-text {
     background-color: #3d2e00;
     border: 1px solid #9e6a03;

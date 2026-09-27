@@ -18,6 +18,9 @@ var progressMarker70 = document.getElementById('progress-marker-70');
 var progressMarker80 = document.getElementById('progress-marker-80');
 var progressMaxLabel = document.getElementById('progress-max-label');
 
+// ===== Scoring Constants =====
+var RESEARCH_ACHIEVEMENT_POINTS = 15;
+
 // ===== Drag State =====
 var isDragging = false;
 var currentX;
@@ -64,9 +67,10 @@ function calculatePoints() {
     }, 0);
     var salary = calculateSalaryPoints(age);
     var japaneseProficiency = parseInt(form.elements['japanese-proficiency'].value, 10) || 0;
-    var researchAchievements = Array.from(form.elements['research-achievements']).reduce(function(sum, checkbox) {
-        return sum + (checkbox.checked ? parseInt(checkbox.value, 10) : 0);
-    }, 0);
+    // Flat 15 on the technical track; the 25-point "two or more items" rule applies only to academic research.
+    var researchAchievements = Array.from(form.elements['research-achievements']).some(function(checkbox) {
+        return checkbox.checked;
+    }) ? RESEARCH_ACHIEVEMENT_POINTS : 0;
     var qualifications = parseInt(form.elements.qualifications.value, 10) || 0;
 
     var totalPoints = age + academic + additionalAcademic + experience + additionalOrganization + salary + japaneseProficiency + researchAchievements + qualifications;
