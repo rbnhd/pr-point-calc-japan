@@ -63,7 +63,9 @@ function calculatePoints() {
     }, 0);
     var experience = parseInt(form.elements.experience.value, 10) || 0;
     var additionalOrganization = Array.from(form.elements['additional-organization']).reduce(function(sum, checkbox) {
-        return sum + (checkbox.checked ? parseInt(checkbox.value, 10) : 0);
+        // The SME add-on (Note 3) only applies on top of the innovation-support bonus.
+        var counts = checkbox.checked && (checkbox !== smeCheckbox || innovationSupportCheckbox.checked);
+        return sum + (counts ? parseInt(checkbox.value, 10) : 0);
     }, 0);
     var salary = calculateSalaryPoints(age);
     var japaneseProficiency = parseInt(form.elements['japanese-proficiency'].value, 10) || 0;
