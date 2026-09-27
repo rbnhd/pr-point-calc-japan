@@ -45,6 +45,7 @@ floatingPointsElement.addEventListener('touchstart', dragStart, { passive: false
 document.addEventListener('touchmove', drag, { passive: false });
 document.addEventListener('touchend', dragEnd);
 darkModeSwitch.addEventListener('change', toggleDarkMode);
+window.addEventListener('pageshow', syncFormState);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
     if (!localStorage.getItem('theme')) {
         applyTheme(e.matches);
@@ -57,6 +58,11 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
  * Called on every form change event.
  */
 function calculatePoints() {
+    if (!form.querySelector('input:checked')) {
+        showEmptyResult();
+        return;
+    }
+
     if (salaryUnder3MRadio.checked) {
         showIneligibleResult();
         return;
@@ -90,6 +96,16 @@ function calculatePoints() {
     updateFloatingPointsColor(totalPoints);
     updateProgressBar(totalPoints);
     updateResultMessage(totalPoints, salaryAwaitingAge);
+}
+
+/**
+ * Shows the neutral starting state used before anything is selected.
+ */
+function showEmptyResult() {
+    totalPointsElement.textContent = '0';
+    floatingPointsElement.classList.remove('points-red', 'points-yellow-green', 'points-green');
+    updateProgressBar(0);
+    updateResultMessage(0);
 }
 
 /**
@@ -195,6 +211,18 @@ function toggleDesignatedTrainingHelp() {
     designatedTrainingHelp.style.display = japaneseUniversityCheckbox.checked ? 'block' : 'none';
 }
 
+/**
+ * Re-applies all conditional UI state and recalculates from the current form values.
+ * Browsers restore form state on reload and back/forward navigation without firing
+ * change events, so this runs on load, on every pageshow, and after reset.
+ */
+function syncFormState() {
+    toggleSMECheckbox();
+    toggleJLPTN2Radio();
+    toggleDesignatedTrainingHelp();
+    calculatePoints();
+}
+
 // ===== Progress Bar & Results =====
 /**
  * Updates the progress bar width and color based on current points.
@@ -271,15 +299,7 @@ function updateResultMessage(points, salaryAwaitingAge) {
  */
 function resetCalculator() {
     form.reset();
-    totalPointsElement.textContent = '0';
-    updateProgressBar(0);
-    updateResultMessage(0);
-    floatingPointsElement.classList.remove('points-red', 'points-yellow-green', 'points-green');
-    smeCheckbox.disabled = true;
-    smeCheckbox.checked = false;
-    jlptN2Radio.disabled = false;
-    jlptN2Help.style.display = 'none';
-    designatedTrainingHelp.style.display = 'none';
+    syncFormState();
     xOffset = 0;
     yOffset = 0;
     floatingPointsElement.style.transform = '';
@@ -370,3 +390,4 @@ function toggleDarkMode() {
 
 // ===== Initialization =====
 initializeTheme();
+syncFormState();
