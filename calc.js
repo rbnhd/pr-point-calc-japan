@@ -306,13 +306,13 @@ function updateResultMessage(points, salaryAwaitingAge) {
     resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
 
     if (points < 70) {
-        resultMessage.textContent = 'You have ' + points + ' points. You need ' + (70 - points) + ' more points to reach the 3-year threshold. For PR eligibility, we must maintain 70+ points continuously for 3 years before the application date.';
+        resultMessage.textContent = 'You have ' + points + ' points. You need ' + (70 - points) + ' more points to reach the 3-year threshold. For PR eligibility, you must maintain 70+ points continuously for 3 years before the application date.';
         resultMessage.classList.add('result-under-70');
     } else if (points < 80) {
-        resultMessage.textContent = 'You have ' + points + ' points. This meets the 3-year route threshold if we maintain 70+ continuously for 3 years before applying. You need ' + (80 - points) + ' more points to target the 1-year route.';
+        resultMessage.textContent = 'You have ' + points + ' points. This meets the 3-year route threshold if you maintain 70+ continuously for 3 years before applying. You need ' + (80 - points) + ' more points to target the 1-year route.';
         resultMessage.classList.add('result-70-to-79');
     } else {
-        resultMessage.textContent = 'You have ' + points + ' points. This meets the 1-year route threshold if we maintain 80+ continuously for 1 year immediately before applying.';
+        resultMessage.textContent = 'You have ' + points + ' points. This meets the 1-year route threshold if you maintain 80+ continuously for 1 year immediately before applying.';
         resultMessage.classList.add('result-80-plus');
     }
 
