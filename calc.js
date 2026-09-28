@@ -239,7 +239,9 @@ function toggleDesignatedTrainingHelp() {
  */
 function isFreshNavigation() {
     var entries = window.performance && performance.getEntriesByType ? performance.getEntriesByType('navigation') : [];
-    return entries.length > 0 && entries[0].type === 'navigate';
+    if (entries.length > 0) return entries[0].type === 'navigate';
+    // Safari < 15 has no navigation entries; fall back to Navigation Timing Level 1 (0 = navigate).
+    return !!(window.performance && performance.navigation) && performance.navigation.type === 0;
 }
 
 /**
@@ -418,8 +420,8 @@ function toggleDarkMode() {
 
 // ===== Initialization =====
 initializeTheme();
-// On back/forward (and reload), Chromium restores form state after this script runs and
-// skips disabled controls, so gating waits for pageshow, which also fires on first load.
+// On back/forward (and reload in Firefox), the browser restores form state after this script
+// runs and skips disabled controls, so gating waits for pageshow, which also fires on first load.
 // A fresh navigation has nothing to restore, so gate at once rather than after slow assets.
 if (isFreshNavigation()) {
     syncFormState();
