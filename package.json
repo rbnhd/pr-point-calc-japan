@@ -1,0 +1,11 @@
+{
+  "name": "pr-point-calc-japan",
+  "private": true,
+  "description": "Japan HSP permanent residency points calculator (static site). Dependencies here are for tests only.",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}

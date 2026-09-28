@@ -153,6 +153,24 @@ jobs:
           eslint "*.js" --quiet || exit 1
           echo "✅ All JavaScript files have valid syntax!"
 
+  test-scoring:
+    name: Test Scoring Logic
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install test dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
   check-links:
     name: Check for Broken Links
     runs-on: ubuntu-latest
@@ -195,7 +213,7 @@ jobs:
   summary:
     name: Validation Summary
     runs-on: ubuntu-latest
-    needs: [validate-html, validate-css, validate-javascript, check-links]
+    needs: [validate-html, validate-css, validate-javascript, test-scoring, check-links]
     if: always()
     permissions:
       pull-requests: write
@@ -224,6 +242,12 @@ jobs:
             echo "❌ JavaScript validation: FAILED"
           fi
 
+          if [ "${{ needs.test-scoring.result }}" = "success" ]; then
+            echo "✅ Scoring tests: PASSED"
+          else
+            echo "❌ Scoring tests: FAILED"
+          fi
+
           if [ "${{ needs.check-links.result }}" = "success" ]; then
             echo "✅ Link checking: PASSED"
           else
@@ -232,7 +256,8 @@ jobs:
 
           if [ "${{ needs.validate-html.result }}" != "success" ] || \
              [ "${{ needs.validate-css.result }}" != "success" ] || \
-             [ "${{ needs.validate-javascript.result }}" != "success" ]; then
+             [ "${{ needs.validate-javascript.result }}" != "success" ] || \
+             [ "${{ needs.test-scoring.result }}" != "success" ]; then
             echo ""
             echo "❌ Some validation checks failed. Please fix the issues above."
             echo "overall_status=failed" >> $GITHUB_OUTPUT
@@ -250,6 +275,7 @@ jobs:
               html: '${{ needs.validate-html.result }}',
               css: '${{ needs.validate-css.result }}',
               javascript: '${{ needs.validate-javascript.result }}',
+              tests: '${{ needs.test-scoring.result }}',
               links: '${{ needs.check-links.result }}'
             };
 
@@ -264,6 +290,7 @@ jobs:
             | HTML Validation | ${results.html === 'success' ? '✅ Passed' : '❌ Failed'} |
             | CSS Validation | ${results.css === 'success' ? '✅ Passed' : '❌ Failed'} |
             | JavaScript Validation | ${results.javascript === 'success' ? '✅ Passed' : '❌ Failed'} |
+            | Scoring Tests | ${results.tests === 'success' ? '✅ Passed' : '❌ Failed'} |
             | Link Checking | ${results.links === 'success' ? '✅ Passed' : '⚠️ Warnings'} |
 
             ${status === 'passed' ? '🎉 This PR is ready to merge!' : '⚠️ Please fix the failing checks before merging.'}

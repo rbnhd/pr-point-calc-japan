@@ -124,8 +124,13 @@ footer {
 section > div,
 fieldset > div {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     margin-bottom: 10px;
+}
+
+fieldset > div > .help-text {
+    flex: 1 1 100%;
 }
 
 input[type="checkbox"],
@@ -136,7 +141,14 @@ input[type="radio"] {
 
 .checkbox-label {
     display: inline-block;
+    flex: 1 1 0;
+    min-width: 0;
     margin-left: 8px;
+}
+
+input:disabled + .checkbox-label {
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
 .sub-bullet {
@@ -293,6 +305,10 @@ input:checked+.toggle-slider:before {
     border-radius: 6px;
     font-size: 14px;
     color: #4d2d00;
+}
+
+.section-note {
+    margin: 0 0 12px;
 }
 
 .dark-mode .help-text {

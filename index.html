@@ -23,6 +23,10 @@
         <h1><strong>PR Eligibility Points Calculator, Japan</strong></h1>
         <p><strong>This calculator is designed for highly-skilled foreign professionals seeking permanent residency in
                 Japan.</strong></p>
+        <p>It scores the <strong>advanced specialized / technical activities</strong> track (高度専門・技術活動, HSP (i)(b))
+            only. Advanced academic research and business management applicants are scored on different columns of
+            the <a href="https://www.moj.go.jp/isa/content/001398882.pdf" target="_blank">official points calculation
+                table</a>.</p>
 
 
         <div class="floating-points" id="floating-points" role="status" aria-live="polite" aria-atomic="true">
@@ -79,12 +83,18 @@
                     </div>
                     <div>
                         <input type="radio" id="professional" name="academic" value="25">
-                        <label for="professional" class="checkbox-label">Professional degree (MBA, MOT) in business
-                            administration</label>
+                        <label for="professional" class="checkbox-label">Professional degree in business management
+                            (MBA, MOT): the master's-level 20 points plus a 5-point addition (if you also hold a doctorate,
+                            select the doctoral option instead)</label>
                     </div>
                     <div>
                         <input type="radio" id="masters" name="academic" value="20">
-                        <label for="masters" class="checkbox-label">Master's or professional degree (Senmon Gakko)</label>
+                        <label for="masters" class="checkbox-label">Master's degree, or a professional degree (専門職学位, e.g.
+                            J.D.)</label>
+                        <div class="help-text">
+                            <strong>Note:</strong> A vocational school (専門学校) diploma, 専門士 or 高度専門士, is not a
+                            master's or professional degree and does not qualify for these points.
+                        </div>
                     </div>
                     <div>
                         <input type="radio" id="bachelors" name="academic" value="10">
@@ -103,7 +113,8 @@
                     <legend class="section-title">Additional Academic Qualifications 🏫</legend>
                     <div>
                         <input type="checkbox" id="japanese-university" name="additional-academic" value="10">
-                        <label for="japanese-university" class="checkbox-label">Graduated from a Japanese university</label>
+                        <label for="japanese-university" class="checkbox-label">Earned a degree from a Japanese institution of higher
+                            education (e.g., a Japanese university or graduate school)</label>
                     </div>
                     <div>
                         <input type="checkbox" id="highly-reputable" name="additional-academic" value="10">
@@ -112,7 +123,8 @@
                     <div>
                         <input type="checkbox" id="multiple-degrees" name="additional-academic" value="5">
                         <label for="multiple-degrees" class="checkbox-label">Two or more doctoral or master's degrees or
-                            professional degrees in multiple fields</label>
+                            professional degrees in multiple fields (select a master's-level degree or higher above
+                            first)</label>
                     </div>
                     <div>
                         <input type="checkbox" id="designated-training" name="additional-academic" value="5">
@@ -127,6 +139,7 @@
             <section>
                 <fieldset>
                     <legend class="section-title">Research Achievements 🔬</legend>
+                    <p class="help-text section-note">Any one or more of the items below awards 15 points in total on the advanced specialized / technical track. Additional items do not increase the score.</p>
                     <div>
                         <input type="checkbox" id="patents" name="research-achievements" value="15">
                         <label for="patents" class="checkbox-label">Hold at least one patent as an inventor</label>
@@ -162,10 +175,10 @@
                     <div>
                         <input type="radio" id="jlpt-n2" name="japanese-proficiency" value="10">
                         <label for="jlpt-n2" class="checkbox-label">Passed N2 of the Japanese-Language Proficiency Test or
-                            equivalent (e.g., 400+ points on the BJT), but not applicable if the applicant graduated from a
-                            Japanese university</label>
+                            equivalent (e.g., 400+ points on the BJT). Not available together with the Japanese-degree
+                            bonus above</label>
                         <div id="jlpt-n2-help" class="help-text" style="display: none;">
-                            <strong>Note:</strong> This option is not available because you selected "Graduated from a Japanese university" above. According to the regulations, JLPT N2 points cannot be claimed if you graduated from a Japanese university.
+                            <strong>Note:</strong> This option is not available because you selected "Earned a degree from a Japanese institution of higher education" above. JLPT N2 points cannot be combined with that bonus (Bonus 7) or with N1 (Bonus 8).
                         </div>
                     </div>
                     <div>
@@ -179,15 +192,19 @@
 
             <section>
                 <fieldset>
-                    <legend class="section-title">Holder of Japanese National Qualifications 「国家資格」 📜 <span style="font-size: 0.8em; font-weight: normal;">(<a href="https://www.moj.go.jp/isa/content/930001661.pdf" target="_blank">see eligible qualifications</a>)</span></legend>
+                    <legend class="section-title">Japanese National Qualifications 「国家資格」 or IT Exams 📜 <span style="font-size: 0.8em; font-weight: normal;">(<a href="https://www.moj.go.jp/isa/content/930001658.pdf" target="_blank">see the rule in the MoJ ordinance</a>)</span></legend>
+                    <p class="help-text section-note">Counts Japanese national qualifications related to your work that are licensed or
+                        title-protected (業務独占 / 名称独占), and
+                        IT exams or IT qualifications designated by the Minister of Justice (e.g., IPA information technology
+                        engineer exams). 5 points for one, 10 points for two or more.</p>
                     <div>
                         <input type="radio" id="qualifications-multiple" name="qualifications" value="10">
-                        <label for="qualifications-multiple" class="checkbox-label">Yes, I have more than one
-                            license</label>
+                        <label for="qualifications-multiple" class="checkbox-label">Yes, two or more qualifications or
+                            exams</label>
                     </div>
                     <div>
                         <input type="radio" id="qualifications-one" name="qualifications" value="5">
-                        <label for="qualifications-one" class="checkbox-label">Yes, I have at least one license</label>
+                        <label for="qualifications-one" class="checkbox-label">Yes, one qualification or exam</label>
                     </div>
                     <div>
                         <input type="radio" id="qualifications-none" name="qualifications" value="0">
@@ -198,7 +215,7 @@
 
             <section>
                 <fieldset>
-                    <legend class="section-title">Work Experience 💼</legend>
+                    <legend class="section-title">Work Experience related to the intended work 💼</legend>
                     <div>
                         <input type="radio" id="experience-10-plus" name="experience" value="20">
                         <label for="experience-10-plus" class="checkbox-label">10 years or more</label>
@@ -234,7 +251,7 @@
                         <input type="checkbox" id="sme" name="additional-organization" value="10">
                         <label for="sme" class="checkbox-label">The above organization is recognized as a Small and
                             Medium-sized Enterprise
-                            (SME)</label>
+                            (SME) (requires the innovation-support item above)</label>
                     </div>
                     <div>
                         <input type="checkbox" id="rd-ratio" name="additional-organization" value="5">
@@ -296,6 +313,11 @@
                     <div>
                         <input type="radio" id="salary-3-4m" name="salary" value="0">
                         <label for="salary-3-4m" class="checkbox-label">¥3M to ¥4M</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="salary-under-3m" name="salary" value="0">
+                        <label for="salary-under-3m" class="checkbox-label">Under ¥3M (below the minimum for this
+                            track)</label>
                     </div>
                 </fieldset>
             </section>

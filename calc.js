@@ -17,6 +17,12 @@ var designatedTrainingHelp = document.getElementById('designated-training-help')
 var progressMarker70 = document.getElementById('progress-marker-70');
 var progressMarker80 = document.getElementById('progress-marker-80');
 var progressMaxLabel = document.getElementById('progress-max-label');
+var salaryUnder3MRadio = document.getElementById('salary-under-3m');
+var multipleDegreesCheckbox = document.getElementById('multiple-degrees');
+
+// ===== Scoring Constants =====
+var RESEARCH_ACHIEVEMENT_POINTS = 15;
+var MASTERS_LEVEL_POINTS = 20;
 
 // ===== Drag State =====
 var isDragging = false;
@@ -33,6 +39,9 @@ innovationSupportCheckbox.addEventListener('change', toggleSMECheckbox);
 resetButton.addEventListener('click', resetCalculator);
 japaneseUniversityCheckbox.addEventListener('change', toggleJLPTN2Radio);
 japaneseUniversityCheckbox.addEventListener('change', toggleDesignatedTrainingHelp);
+Array.from(form.elements.academic).forEach(function(radio) {
+    radio.addEventListener('change', toggleMultipleDegreesCheckbox);
+});
 floatingPointsElement.addEventListener('mousedown', dragStart);
 document.addEventListener('mousemove', drag);
 document.addEventListener('mouseup', dragEnd);
@@ -40,7 +49,9 @@ document.addEventListener('mouseleave', dragEnd);
 floatingPointsElement.addEventListener('touchstart', dragStart, { passive: false });
 document.addEventListener('touchmove', drag, { passive: false });
 document.addEventListener('touchend', dragEnd);
+document.addEventListener('touchcancel', dragEnd);
 darkModeSwitch.addEventListener('change', toggleDarkMode);
+window.addEventListener('pageshow', syncFormState);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
     if (!localStorage.getItem('theme')) {
         applyTheme(e.matches);
@@ -53,20 +64,38 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
  * Called on every form change event.
  */
 function calculatePoints() {
+    if (!form.querySelector('input:checked')) {
+        showEmptyResult();
+        return;
+    }
+
+    if (salaryUnder3MRadio.checked) {
+        showIneligibleResult();
+        return;
+    }
+
+    // An empty age group must not fall through to the 40+ salary column (age value 0).
+    var ageSelected = form.elements.age.value !== '';
     var age = parseInt(form.elements.age.value, 10) || 0;
     var academic = parseInt(form.elements.academic.value, 10) || 0;
     var additionalAcademic = Array.from(form.elements['additional-academic']).reduce(function(sum, checkbox) {
-        return sum + (checkbox.checked ? parseInt(checkbox.value, 10) : 0);
+        // "Multiple degrees" needs two or more doctoral/master's/professional degrees.
+        var counts = checkbox.checked && (checkbox !== multipleDegreesCheckbox || hasMastersLevelDegree());
+        return sum + (counts ? parseInt(checkbox.value, 10) : 0);
     }, 0);
     var experience = parseInt(form.elements.experience.value, 10) || 0;
     var additionalOrganization = Array.from(form.elements['additional-organization']).reduce(function(sum, checkbox) {
-        return sum + (checkbox.checked ? parseInt(checkbox.value, 10) : 0);
+        // The SME add-on (Note 3) only applies on top of the innovation-support bonus.
+        var counts = checkbox.checked && (checkbox !== smeCheckbox || innovationSupportCheckbox.checked);
+        return sum + (counts ? parseInt(checkbox.value, 10) : 0);
     }, 0);
-    var salary = calculateSalaryPoints(age);
+    var salary = calculateSalaryPoints(ageSelected ? age : null);
+    var salaryAwaitingAge = !ageSelected && isAgeDependent(getSalaryRow());
     var japaneseProficiency = parseInt(form.elements['japanese-proficiency'].value, 10) || 0;
-    var researchAchievements = Array.from(form.elements['research-achievements']).reduce(function(sum, checkbox) {
-        return sum + (checkbox.checked ? parseInt(checkbox.value, 10) : 0);
-    }, 0);
+    // Flat 15 on the technical track; the 25-point "two or more items" rule applies only to academic research.
+    var researchAchievements = Array.from(form.elements['research-achievements']).some(function(checkbox) {
+        return checkbox.checked;
+    }) ? RESEARCH_ACHIEVEMENT_POINTS : 0;
     var qualifications = parseInt(form.elements.qualifications.value, 10) || 0;
 
     var totalPoints = age + academic + additionalAcademic + experience + additionalOrganization + salary + japaneseProficiency + researchAchievements + qualifications;
@@ -74,7 +103,31 @@ function calculatePoints() {
     totalPointsElement.textContent = totalPoints;
     updateFloatingPointsColor(totalPoints);
     updateProgressBar(totalPoints);
-    updateResultMessage(totalPoints);
+    updateResultMessage(totalPoints, salaryAwaitingAge);
+}
+
+/**
+ * Shows the neutral starting state used before anything is selected.
+ */
+function showEmptyResult() {
+    totalPointsElement.textContent = '0';
+    floatingPointsElement.classList.remove('points-red', 'points-yellow-green', 'points-green');
+    updateProgressBar(0);
+    resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
+    resultMessage.textContent = 'Select your criteria above to calculate points.';
+}
+
+/**
+ * Replaces the score with an ineligibility notice. The technical track requires an
+ * annual salary of at least JPY 3M, so no point total qualifies below it.
+ */
+function showIneligibleResult() {
+    totalPointsElement.textContent = 'N/A';
+    updateFloatingPointsColor(0);
+    updateProgressBar(0);
+    resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
+    resultMessage.textContent = 'Not eligible: the advanced specialized / technical track requires an annual salary of at least ¥3M. Points cannot be counted below this minimum.';
+    resultMessage.classList.add('result-under-70');
 }
 
 // ===== Salary-Age Matrix =====
@@ -87,10 +140,22 @@ function calculatePoints() {
  * Higher salary bands award full points regardless of age.
  * Lower salary bands award 0 points for older age brackets.
  *
- * @param {number} age - The age point value from the form (15, 10, 5, or 0)
+ * With no age selected, only bands that score the same for every age count.
+ *
+ * @param {?number} age - The age point value from the form (15, 10, 5, or 0), or null if unselected
  * @returns {number} The adjusted salary points
  */
 function calculateSalaryPoints(age) {
+    var row = getSalaryRow();
+
+    if (age === null) {
+        return isAgeDependent(row) ? 0 : row[0];
+    }
+
+    return row[getAgeIndex(age)];
+}
+
+function getSalaryRow() {
     var salary = parseInt(form.elements.salary.value, 10) || 0;
     var salaryPoints = [
         [40, 40, 40, 40],
@@ -102,10 +167,14 @@ function calculateSalaryPoints(age) {
         [10, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    var ageIndex = getAgeIndex(age);
-    var salaryIndex = getSalaryIndex(salary);
 
-    return salaryPoints[salaryIndex][ageIndex];
+    return salaryPoints[getSalaryIndex(salary)];
+}
+
+function isAgeDependent(row) {
+    return row.some(function(points) {
+        return points !== row[0];
+    });
 }
 
 function getAgeIndex(age) {
@@ -147,8 +216,45 @@ function toggleJLPTN2Radio() {
     }
 }
 
+function hasMastersLevelDegree() {
+    return (parseInt(form.elements.academic.value, 10) || 0) >= MASTERS_LEVEL_POINTS;
+}
+
+function toggleMultipleDegreesCheckbox() {
+    if (hasMastersLevelDegree()) {
+        multipleDegreesCheckbox.disabled = false;
+    } else {
+        multipleDegreesCheckbox.disabled = true;
+        multipleDegreesCheckbox.checked = false;
+    }
+}
+
 function toggleDesignatedTrainingHelp() {
     designatedTrainingHelp.style.display = japaneseUniversityCheckbox.checked ? 'block' : 'none';
+}
+
+/**
+ * True when the page was opened by a normal navigation, so the browser has no
+ * history form state to restore.
+ */
+function isFreshNavigation() {
+    var entries = window.performance && performance.getEntriesByType ? performance.getEntriesByType('navigation') : [];
+    if (entries.length > 0) return entries[0].type === 'navigate';
+    // Safari < 15 has no navigation entries; fall back to Navigation Timing Level 1 (0 = navigate).
+    return !!(window.performance && performance.navigation) && performance.navigation.type === 0;
+}
+
+/**
+ * Re-applies all conditional UI state and recalculates from the current form values.
+ * Browsers restore form state on reload and back/forward navigation without firing
+ * change events, so this runs on every pageshow (including first load) and after reset.
+ */
+function syncFormState() {
+    toggleSMECheckbox();
+    toggleMultipleDegreesCheckbox();
+    toggleJLPTN2Radio();
+    toggleDesignatedTrainingHelp();
+    calculatePoints();
 }
 
 // ===== Progress Bar & Results =====
@@ -192,13 +298,14 @@ function positionProgressMarkers(scaleMax) {
 /**
  * Updates the result message text and styling based on point thresholds.
  * @param {number} points - Current total points
+ * @param {boolean} [salaryAwaitingAge] - True when a salary band needs an age to be scored
  */
-function updateResultMessage(points) {
+function updateResultMessage(points, salaryAwaitingAge) {
+    var ageHint = 'Select your age to include salary points.';
+
     resultMessage.classList.remove('result-under-70', 'result-70-to-79', 'result-80-plus');
 
-    if (points === 0) {
-        resultMessage.textContent = 'Select your criteria above to calculate points.';
-    } else if (points < 70) {
+    if (points < 70) {
         resultMessage.textContent = 'You have ' + points + ' points. You need ' + (70 - points) + ' more points to reach the 3-year threshold. For PR eligibility, we must maintain 70+ points continuously for 3 years before the application date.';
         resultMessage.classList.add('result-under-70');
     } else if (points < 80) {
@@ -207,6 +314,10 @@ function updateResultMessage(points) {
     } else {
         resultMessage.textContent = 'You have ' + points + ' points. This meets the 1-year route threshold if we maintain 80+ continuously for 1 year immediately before applying.';
         resultMessage.classList.add('result-80-plus');
+    }
+
+    if (salaryAwaitingAge) {
+        resultMessage.textContent += ' ' + ageHint;
     }
 }
 
@@ -217,15 +328,7 @@ function updateResultMessage(points) {
  */
 function resetCalculator() {
     form.reset();
-    totalPointsElement.textContent = '0';
-    updateProgressBar(0);
-    updateResultMessage(0);
-    floatingPointsElement.classList.remove('points-red', 'points-yellow-green', 'points-green');
-    smeCheckbox.disabled = true;
-    smeCheckbox.checked = false;
-    jlptN2Radio.disabled = false;
-    jlptN2Help.style.display = 'none';
-    designatedTrainingHelp.style.display = 'none';
+    syncFormState();
     xOffset = 0;
     yOffset = 0;
     floatingPointsElement.style.transform = '';
@@ -247,6 +350,7 @@ function updateFloatingPointsColor(points) {
 
 function dragStart(e) {
     if (window.innerWidth <= 768) return;
+    if (e.type === 'mousedown' && e.button !== 0) return;
 
     var clientX = e.touches ? e.touches[0].clientX : e.clientX;
     var clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -316,3 +420,9 @@ function toggleDarkMode() {
 
 // ===== Initialization =====
 initializeTheme();
+// On back/forward (and reload in Firefox), the browser restores form state after this script
+// runs and skips disabled controls, so gating waits for pageshow, which also fires on first load.
+// A fresh navigation has nothing to restore, so gate at once rather than after slow assets.
+if (isFreshNavigation()) {
+    syncFormState();
+}
